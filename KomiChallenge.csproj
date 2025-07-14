@@ -8,12 +8,12 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Utils\ztests.cs~RF190b6daf.TMP" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
 		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
 		<PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Scripts\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="Assembly-CSharp">
@@ -27,6 +27,15 @@
 	  </Reference>
 	  <Reference Include="PhotonUnityNetworking">
 	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\PhotonUnityNetworking.dll</HintPath>
+	  </Reference>
+	  <Reference Include="PhotonVoice">
+	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\PhotonVoice.dll</HintPath>
+	  </Reference>
+	  <Reference Include="PhotonVoice.API">
+	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\PhotonVoice.API.dll</HintPath>
+	  </Reference>
+	  <Reference Include="PhotonVoice.PUN">
+	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\PhotonVoice.PUN.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Sirenix.Serialization">
 	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\Sirenix.Serialization.dll</HintPath>
@@ -46,8 +55,14 @@
 	  <Reference Include="UnityEngine.InputLegacyModule">
 	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
 	  </Reference>
+	  <Reference Include="UnityEngine.UI">
+	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.UI.dll</HintPath>
+	  </Reference>
 	  <Reference Include="Zorro.Core.Runtime">
 	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\Zorro.Core.Runtime.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Zorro.Settings.Runtime">
+	    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\Zorro.Settings.Runtime.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 
