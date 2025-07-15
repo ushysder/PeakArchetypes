@@ -1,8 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
+using KomiChallenge.Scripts;
 
 
 namespace KomiChallenge
@@ -21,6 +23,7 @@ namespace KomiChallenge
         void Awake()
         {
             PatchAllStuff();
+            AssignRoles.AppendRoles();
 
         }
 
