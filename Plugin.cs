@@ -5,6 +5,7 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using KomiChallenge.Scripts;
+using KomiChallenge.Utils;
 
 
 namespace KomiChallenge
@@ -22,6 +23,7 @@ namespace KomiChallenge
 
         void Awake()
         {
+            PConfig.AllConfigs(Config);
             PatchAllStuff();
             AssignRoles.AppendRoles();
 
@@ -40,7 +42,11 @@ namespace KomiChallenge
 
         public static void SendLog(string msg)
         {
-            mls.LogInfo(msg);
+            if (PConfig.enableDevLogs.Value)
+            {
+                mls.LogInfo(msg);
+            }
+            
         }
 
 

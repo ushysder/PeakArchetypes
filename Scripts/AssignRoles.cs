@@ -1,8 +1,10 @@
 ﻿//using System;
+using System;
 using System.Collections.Generic;
 using KomiChallenge.Comps;
 using Photon.Voice.PUN;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace KomiChallenge.Scripts
@@ -110,7 +112,12 @@ namespace KomiChallenge.Scripts
 
             foreach (int p in newPlayers)
             {
-                int seed = (int)Character.AllCharacters[0].gameObject.transform.position.x;
+                long raw_utcSecs = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                string utc_str = $"{raw_utcSecs}";
+                string second_to_last_nums = utc_str.Substring(7, 2);
+                int.TryParse(second_to_last_nums, out int seed);
+
+                //int seed = (int)second_to_last_nums;
                 Random.InitState(seed);
 
                 Plugin.SendLog($">>> Rnd Seed: {seed}");

@@ -48,7 +48,10 @@ namespace KomiChallenge.Comps
 
         private void BlindUser()
         {
-            MainCamera.instance.transform.GetComponent<Camera>().enabled = false;
+            Camera mycam = MainCamera.instance.transform.GetComponent<Camera>();
+            if (mycam == null || mycam.enabled == false) return;
+            mycam.enabled = false;
+
         }
 
         private void DeafUser()

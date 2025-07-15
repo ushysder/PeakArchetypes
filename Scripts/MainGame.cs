@@ -105,7 +105,7 @@ namespace KomiChallenge.Scripts
             Plugin.SendLog(">>> You died (rip)");
         }
 
-
+        //PlayerConnectionLog
 
         /// <summary>
         /// Remove all debuffs once the game ends
@@ -114,7 +114,29 @@ namespace KomiChallenge.Scripts
         [HarmonyPrefix]
         private static bool EndGamePatch()
         {
-            Role plrRole = Character.localCharacter.GetComponent<Role>();
+            ResetVars("Game has ended");
+            return true;
+        }
+
+
+
+        [HarmonyPatch(typeof(PassportManager), "Awake")]
+        [HarmonyPrefix]
+        private static bool OnPlayerLeftRoomPatch()
+        {
+            //ResetVars("Player Spawned in");
+            AssignRoles.players.Clear();
+            enteredAwake = false;
+            return true;
+        }
+
+
+
+        private static void ResetVars(string msg = "")
+        {
+            Character ch = Character.localCharacter;
+            if (ch == null) return;
+            Role plrRole = ch.GetComponent<Role>();
             if (plrRole != null)
             {
                 plrRole.enabled = false;
@@ -123,11 +145,8 @@ namespace KomiChallenge.Scripts
             AssignRoles.RemoveDebuffs();
             AssignRoles.players.Clear();
             enteredAwake = false;
-            Plugin.SendLog(">>> Game has ended");
-
-            return true;
+            Plugin.SendLog($">>> {msg}");
         }
-
 
 
         private static IEnumerator AssginDebuffs()
