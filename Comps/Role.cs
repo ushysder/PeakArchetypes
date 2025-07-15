@@ -2,6 +2,7 @@
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 using static KomiChallenge.Scripts.AssignRoles;
 
 namespace KomiChallenge.Comps
@@ -14,6 +15,8 @@ namespace KomiChallenge.Comps
         public RoleType roleType { get; set; }
 
         public Recorder rec;
+        public GameObject blackScreen;
+        private static bool blinded = false;
 
         public Role(string roleName, string desc, RoleType roleType)
         {
@@ -23,10 +26,25 @@ namespace KomiChallenge.Comps
 
         }
 
+        private void Start()
+        {
+            blinded = false;
+        }
+
         private void Update()
         {
             ActivateDebuff();
         }
+
+        private void OnDestroy()
+        {
+            if (blackScreen != null)
+            {
+                Destroy(blackScreen);
+                blinded = false;
+            }
+        }
+
 
         public void ActivateDebuff()
         {
@@ -48,10 +66,19 @@ namespace KomiChallenge.Comps
 
         private void BlindUser()
         {
-            Camera mycam = MainCamera.instance.transform.GetComponent<Camera>();
-            if (mycam == null || mycam.enabled == false) return;
-            mycam.enabled = false;
+            if (blinded) return;
+            GameObject parent = GameObject.Find("GAME/GUIManager/Canvas_HUD");
+            blackScreen = new GameObject("blackScreen");
+            blackScreen.transform.SetParent(parent.transform, false);
+            blackScreen.AddComponent<Image>().color = Color.black;
 
+            blackScreen.transform.SetAsFirstSibling();
+
+            RectTransform rect = blackScreen.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(7200, 7200);
+
+
+            blinded = true;
         }
 
         private void DeafUser()

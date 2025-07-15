@@ -26,9 +26,13 @@ namespace KomiChallenge.Scripts
 
         public static void RemoveDebuffs()
         {
-            MainCamera.instance.transform.GetComponent<Camera>().enabled = true;
             AudioListener.volume = 1;
             Character.localCharacter.GetComponent<PhotonVoiceView>().RecorderInUse.TransmitEnabled = true;
+            Role plrRole = Character.localCharacter.GetComponent<Role>();
+            if (plrRole != null)
+            {
+                Plugin.Destroy(plrRole.blackScreen);
+            }
 
         }
 
@@ -42,7 +46,7 @@ namespace KomiChallenge.Scripts
             RoleType.blind)
             );
 
-
+            
             defaultTypes.Add(new Role(
             "Deaf",
             "People can hear you but you can't hear them.",
@@ -55,7 +59,7 @@ namespace KomiChallenge.Scripts
             "Kill them all. No survivors.",
             RoleType.mute
             ));
-
+            
 
         }
 
