@@ -16,6 +16,16 @@ namespace KomiChallenge.Scripts
     {
         public static bool enteredAwake = false;
 
+
+        [HarmonyPatch(typeof(Player), "Awake")]
+        [HarmonyPostfix]
+        private static void GiveID(Player __instance)
+        {
+            PhotonView comp = __instance.GetComponent<PhotonView>();
+            Plugin.localID = comp.Owner.ActorNumber;
+        }
+
+
         [HarmonyPatch(typeof(Campfire), "Awake")]
         [HarmonyPostfix]
         private static void InGame()
@@ -122,7 +132,7 @@ namespace KomiChallenge.Scripts
 
         private static IEnumerator AssginDebuffs()
         {
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(8.4f);
 
             List<int> plrIds = new List<int>();
             foreach (Character plr in Character.AllCharacters)

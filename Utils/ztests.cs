@@ -22,13 +22,7 @@ namespace KomiChallenge.Utils
         }
 
 
-        [HarmonyPatch(typeof(Player), "Awake")]
-        [HarmonyPostfix]
-        private static void GiveID(Player __instance)
-        {
-            PhotonView comp = __instance.GetComponent<PhotonView>();
-            Plugin.localID = comp.Owner.ActorNumber;
-        }
+
 
 
 
