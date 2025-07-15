@@ -29,12 +29,6 @@ namespace KomiChallenge
 
         }
 
-        public static void ResetAllVariables()
-        {
-
-        }
-
-
         private void PatchAllStuff()
         {
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
