@@ -18,7 +18,7 @@ namespace KomiChallenge.Scripts
         }
 
         public static List<Role> defaultTypes = new List<Role>();
-        public static Dictionary<Character, Role> players = new Dictionary<Character, Role>();
+        public static Dictionary<int, Role> players = new Dictionary<int, Role>();
 
 
 
@@ -63,29 +63,34 @@ namespace KomiChallenge.Scripts
         // same thing until everyone has a role.
         // This'll make sure that every role is assigned and if there are extra
         // players, they will be given a role as well
-        public static void SplitList(List<Character> currentPlayers)
+        public static void SplitList(List<int> currentPlayers)
         {
-            List<Character> raw_newPlayers = new List<Character>();
+            List<int> raw_newPlayers = new List<int>();
             List<Role> ogRoleTypes = new List<Role>();
 
             foreach (Role rl in defaultTypes)
             {
                 ogRoleTypes.Add(rl);
+                Plugin.SendLog($">>> Role: {rl.roleName}");
             }
 
+            Plugin.SendLog($">>> ");
 
             // Add 3 players to raw list 
             for (int i = 0; i < ogRoleTypes.Count; i++)
             {
+                Plugin.SendLog($">>> Before before");
                 if (i > currentPlayers.Count - 1) break;
                 raw_newPlayers.Add(currentPlayers[i]);
+
+                Plugin.SendLog($">>> Added {i}");
             }
 
 
-            List<Character> newPlayers = new List<Character>();
+            List<int> newPlayers = new List<int>();
 
             // Filter out duplicates
-            foreach (Character dupli in raw_newPlayers)
+            foreach (int dupli in raw_newPlayers)
             {
                 if (newPlayers.Contains(dupli)) continue;
                 newPlayers.Add(dupli);
@@ -93,7 +98,7 @@ namespace KomiChallenge.Scripts
 
 
             // Remove players stored in raw_newPlayers
-            foreach (Character plr in newPlayers)
+            foreach (int plr in newPlayers)
             {
                 if (currentPlayers.Contains(plr))
                 {
@@ -103,7 +108,7 @@ namespace KomiChallenge.Scripts
 
             // Assign Roles
 
-            foreach (Character p in newPlayers)
+            foreach (int p in newPlayers)
             {
                 int seed = (int)Character.AllCharacters[0].gameObject.transform.position.x;
                 Random.InitState(seed);

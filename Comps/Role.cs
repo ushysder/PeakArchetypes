@@ -17,9 +17,9 @@ namespace KomiChallenge.Comps
 
         public Role(string roleName, string desc, RoleType roleType)
         {
-            roleName = this.roleName;
-            desc = this.desc;
-            roleType = this.roleType;
+            this.roleName = roleName;
+            this.desc = desc;
+            this.roleType = roleType;
 
         }
 

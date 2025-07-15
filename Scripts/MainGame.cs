@@ -4,6 +4,8 @@ using System.Text;
 using HarmonyLib;
 using Photon.Pun;
 using KomiChallenge.Comps;
+using System.Collections;
+using UnityEngine;
 
 
 namespace KomiChallenge.Scripts
@@ -12,14 +14,15 @@ namespace KomiChallenge.Scripts
     [HarmonyPatch]
     internal class MainGame
     {
+        public static bool enteredAwake = false;
 
         [HarmonyPatch(typeof(Campfire), "Awake")]
         [HarmonyPostfix]
         private static void InGame()
         {
-            AssignRoles.SplitList(Character.AllCharacters);
-
-            Plugin.SendLog(">>> Assigned ROLLLES");
+            if (enteredAwake) return;
+            GUIManager.instance.StartCoroutine(AssginDebuffs());
+            enteredAwake = true;
         }
 
 
@@ -32,7 +35,7 @@ namespace KomiChallenge.Scripts
         [HarmonyPrefix]
         private static bool AnnounceRole(ref string text)
         {
-            if (AssignRoles.players.ContainsKey(Character.localCharacter))
+            if (AssignRoles.players.ContainsKey(Plugin.localID))
             {
                 Role plrRole = Character.localCharacter.gameObject.GetComponent<Role>();
                 if (plrRole == null)
@@ -44,9 +47,9 @@ namespace KomiChallenge.Scripts
                     plrRole.enabled = true;
                 }
 
-                plrRole.roleName = AssignRoles.players[Character.localCharacter].roleName;
-                plrRole.roleType = AssignRoles.players[Character.localCharacter].roleType;
-                plrRole.desc = AssignRoles.players[Character.localCharacter].desc;
+                plrRole.roleName = AssignRoles.players[Plugin.localID].roleName;
+                plrRole.roleType = AssignRoles.players[Plugin.localID].roleType;
+                plrRole.desc = AssignRoles.players[Plugin.localID].desc;
 
                 text = plrRole.roleName;
                 Plugin.SendLog(">>> Contains player!");
@@ -109,8 +112,30 @@ namespace KomiChallenge.Scripts
 
             AssignRoles.RemoveDebuffs();
             AssignRoles.players.Clear();
+            enteredAwake = false;
             Plugin.SendLog(">>> Game has ended");
+
             return true;
+        }
+
+
+
+        private static IEnumerator AssginDebuffs()
+        {
+            yield return new WaitForSeconds(15f);
+
+            List<int> plrIds = new List<int>();
+            foreach (Character plr in Character.AllCharacters)
+            {
+                if (plr.isBot) continue;
+                plrIds.Add(plr.GetComponent<PhotonView>().Owner.ActorNumber);
+
+                Plugin.SendLog($">>> Player: {plr.GetComponent<PhotonView>().Owner.ActorNumber}");
+            }
+            AssignRoles.SplitList(plrIds);
+
+
+            Plugin.SendLog(">>> Assigned ROLLLES");
         }
 
     }
