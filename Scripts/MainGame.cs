@@ -96,7 +96,11 @@ namespace KomiChallenge.Scripts
         [HarmonyPostfix]
         private static void PlayerDiedPatch()
         {
-            Role plrRole = Character.localCharacter.GetComponent<Role>();
+            Character chr = Character.localCharacter;
+
+            if (!chr.data.dead) return;
+
+            Role plrRole = chr.GetComponent<Role>();
             if (plrRole != null)
             {
                 plrRole.enabled = false;
@@ -106,7 +110,6 @@ namespace KomiChallenge.Scripts
             Plugin.SendLog(">>> You died (rip)");
         }
 
-        //PlayerConnectionLog
 
         /// <summary>
         /// Remove all debuffs once the game ends

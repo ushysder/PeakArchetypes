@@ -7,7 +7,7 @@ Debuffs:
 - Mute
 
 Everyone will be given one of these debuffs once the game starts.
-If you can make it to at least the first campfire then you're team is epic.
+If you can make it to at least the first campfire then your team is epic.
 
 This mod was inspired by this video: https://www.youtube.com/watch?v=MpWyEgb2c6Y
 
