@@ -31,3 +31,4 @@ When you reach the shore, a popup will show what your debuff is.
 
 If you find any bugs please report in any of these places:
 - https://github.com/zeeblo/KomiChallenge/issues
+- https://discord.com/channels/1363179626435707082/1394737844609613965/1394737844609613965

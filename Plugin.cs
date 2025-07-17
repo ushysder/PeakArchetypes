@@ -16,7 +16,7 @@ namespace KomiChallenge
     {
         public const string modGUID = "KomiChallenge.zeeblo.dev";
         public const string modName = "KomiChallenge";
-        public const string modVersion = "0.1.0";
+        public const string modVersion = "0.1.1";
         private readonly Harmony _harmony = new(modGUID);
         internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
         public static int localID;

@@ -80,7 +80,6 @@ namespace KomiChallenge.Scripts
                 Plugin.SendLog($">>> Role: {rl.roleName}");
             }
 
-            Plugin.SendLog($">>> ");
 
             // Add 3 players to raw list 
             for (int i = 0; i < ogRoleTypes.Count; i++)

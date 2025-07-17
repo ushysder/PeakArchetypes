@@ -22,7 +22,7 @@ namespace KomiChallenge.Scripts
         private static void GiveID(Player __instance)
         {
             PhotonView comp = __instance.GetComponent<PhotonView>();
-            Plugin.localID = comp.Owner.ActorNumber;
+            //Plugin.localID = comp.Owner.ActorNumber;
         }
 
 
@@ -45,7 +45,8 @@ namespace KomiChallenge.Scripts
         [HarmonyPrefix]
         private static bool AnnounceRole(ref string text)
         {
-            if (AssignRoles.players.ContainsKey(Plugin.localID))
+            int localID = Character.localCharacter.gameObject.GetComponent<PhotonView>().Owner.ActorNumber;
+            if (AssignRoles.players.ContainsKey(localID))
             {
                 Role plrRole = Character.localCharacter.gameObject.GetComponent<Role>();
                 if (plrRole == null)
@@ -57,9 +58,9 @@ namespace KomiChallenge.Scripts
                     plrRole.enabled = true;
                 }
 
-                plrRole.roleName = AssignRoles.players[Plugin.localID].roleName;
-                plrRole.roleType = AssignRoles.players[Plugin.localID].roleType;
-                plrRole.desc = AssignRoles.players[Plugin.localID].desc;
+                plrRole.roleName = AssignRoles.players[localID].roleName;
+                plrRole.roleType = AssignRoles.players[localID].roleType;
+                plrRole.desc = AssignRoles.players[localID].desc;
 
                 text = plrRole.roleName;
                 Plugin.SendLog(">>> Contains player!");
