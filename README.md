@@ -1,5 +1,7 @@
 # Komi Challenge
 
+Mod forked from ```https://github.com/zeeblo/KomiChallenge``` and modified for personal use in games with friends.
+
 Debuffs:
 
 - Deaf
