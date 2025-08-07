@@ -66,6 +66,7 @@ public class RoleSelectionUI : MonoBehaviour
 		Debug.Log($">>> Sent role selection: {selected.RoleName}");
 
 		Destroy(panel);
+		Destroy(gameObject);
 	}
 
 	void Start() => CreateUI();
@@ -93,12 +94,8 @@ public class RoleSelectionUI : MonoBehaviour
 			}
 		}
 
-		// Confirm: support both Return and Numpad Enter
-		if (selectedIndex != -1 &&
-			(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
-		{
+		if (selectedIndex != -1 && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
 			OnConfirm();
-		}
 	}
 
 	void UpdateDisplayText()
