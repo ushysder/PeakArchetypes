@@ -25,8 +25,8 @@ public class RoleManager
 	public static void AppendRoles()
 	{
 		defaultTypes.Add(new Role(
-		"Banal",
-		"Quelqu'un d'ordinaire quoi",
+		"Basique",
+		"Vous n'avez pas les bases",
 		RoleType.nothing
 		));
 
