@@ -14,6 +14,10 @@ If you can make it to at least the first campfire then your team is epic.
 
 You can do a full run. The debuff are re-applied once you're revived.
 
+You can configure the delay for drunk & clumsy effects in the config file, which will be generated the first time you launch the game with the mod.
+
+```\PEAK\BepInEx\config\KomiChallenge.ushysder.cfg```
+
 This mod was inspired by this video: https://www.youtube.com/watch?v=MpWyEgb2c6Y
 
 
