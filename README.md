@@ -1,45 +1,53 @@
-# Komi Challenge
+﻿# Komi Challenge
 
-Mod forked from ```https://github.com/zeeblo/KomiChallenge``` and modified for personal use in games with friends.
+A chaotic challenge mod for **The PEAK**, originally forked from [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge), with custom tweaks for games among friends.
 
-Debuffs:
+### 💀 Available Debuffs
 
-- Deaf
-- Blind
-- Mute
-- Drunk
-- Clumsy
+At the start of each run, every player is randomly assigned one of the following debuffs:
 
-Everyone can select one of these debuffs once the game starts.
+- **Deaf** – Can't hear anything.
+- **Blind** – Vision? Who needs it.
+- **Mute** – Say goodbye to your voice lines.
+- **Drunk** – Randomly falls over. Cheers!
+- **Clumsy** – Occasionally loses control as movement inputs are suddenly inverted.
+- **Junky** – Sees the world differently.
+- **Narcoleptic** – Gradually drifts off and collapses into sleep.
 
-If you can make it to at least the first campfire then your team is epic.
+Survive with these conditions... if you can.
 
-You can do a full run. The debuff are re-applied once you're revived.
+Debuffs are **re-applied** after being revived — no easy escapes!
 
-You can configure the delay for drunk & clumsy effects in the config file, which will be generated the first time you launch the game with the mod.
+---
 
-```\PEAK\BepInEx\config\KomiChallenge.ushysder.cfg```
+### ⚙️ Configuration
 
-This mod was inspired by this video: https://www.youtube.com/watch?v=MpWyEgb2c6Y
+You can fine-tune the delays for **Drunk**, **Clumsy**, and **Narcoleptic** effects via the config file:
 
+```PEAK\BepInEx\config\KomiChallenge.ushysder.cfg```
 
-<a href="https://www.youtube.com/watch?v=MpWyEgb2c6Y">
-<img src="https://i.imgur.com/091uDgr.jpeg" alt="YouTube thumbnail">
-</a>
+This file is generated automatically when you first launch the game with the mod enabled.
 
+---
 
-# Example
+### 🎬 Inspiration
 
-When you reach the shore, a popup will show what your debuff is.
+This mod was inspired by this video:  
+**[Watch the challenge in action](https://www.youtube.com/watch?v=MpWyEgb2c6Y)**
 
+[![Komi Challenge YouTube Thumbnail](https://i.imgur.com/091uDgr.jpeg)](https://www.youtube.com/watch?v=MpWyEgb2c6Y)
 
-<img src="https://i.imgur.com/BrQbmBo.png" alt="Player being blind example">
+---
 
+### 📸 Example
 
+Upon reaching the shore, players are shown their assigned debuff:
 
+![Blind Debuff Example](https://i.imgur.com/BrQbmBo.png)
 
-# Contact
+---
 
-If you find any bugs please report in any of these places:
-- https://github.com/zeeblo/KomiChallenge/issues
-- https://discord.com/channels/1363179626435707082/1394737844609613965/1394737844609613965
+### 🐛 Bug Reports / Contact
+
+Found a bug or have a suggestion?  
+DM **Ushysder** on Discord.

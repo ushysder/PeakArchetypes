@@ -1,3 +1,12 @@
+# 0.3.0
+
+Added new role : Narcoleptic
+
+# 0.2.0
+
+Added new roles : Drunk, Clumsy and Junky
+French translation
+UI Role Selection
 
 # 0.1.2
 
