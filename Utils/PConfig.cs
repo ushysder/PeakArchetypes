@@ -31,12 +31,12 @@ public class PConfig
 			"Min interval between falls at peak drunkenness (in seconds). [Min: 1, Max: MaxFallInterval]");
 
 		drunk_passOutDuration = cfg.Bind(
-			"DrunkSettings", "PassOutDuration", 3f,
-			"Duration the player stays passed out (in seconds). [Min: 0.5, Max: 30]");
+			"DrunkSettings", "PassOutDuration", 5f,
+			"Duration the player stays passed out (in seconds). [Min: 1, Max: 30]");
 
 		drunk_timeToMaxDrunkness = cfg.Bind(
 			"DrunkSettings", "TimeToMaxDrunkness", 300f,
-			"Time to reach full drunkenness (in seconds). [Min: 30, Max: 1800]");
+			"Time to reach full drunkenness (in seconds). [Min: 30, Max: 600]");
 
 		clumsy_InvertMinTime = cfg.Bind(
 			"ClumsySettings", "InvertMinTime", 10f,

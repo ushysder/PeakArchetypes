@@ -75,8 +75,16 @@ internal class ClumsyEffects : MonoBehaviour
 			return;
 		}
 
-		validatedMinTime = Mathf.Clamp(PConfig.clumsy_InvertMinTime.Value, 1f, 60f);
-		validatedMaxTime = Mathf.Clamp(PConfig.clumsy_InvertMaxTime.Value, validatedMinTime, 120f);
+		float configMinTime = PConfig.clumsy_InvertMinTime.Value;
+		float configMaxTime = PConfig.clumsy_InvertMaxTime.Value;
+
+		float validatedMinTime = (configMinTime >= 1f && configMinTime <= 60f) 
+			? configMinTime 
+			: 10f;
+
+		float validatedMaxTime = (configMaxTime >= validatedMinTime && configMaxTime <= 120f) 
+			? configMaxTime 
+			: 30f;
 
 		Debug.Log($"[ClumsyEffects] Initialized with invertTimer range ({validatedMinTime}, {validatedMaxTime})");
 	}

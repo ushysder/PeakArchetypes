@@ -14,7 +14,7 @@ public class DrunkController : MonoBehaviour
 	public float drunkennessLevel = 0f;
 	public float maxFallInterval = 45f;
 	public float minFallInterval = 10f;
-	public float passOutDuration = 3f;
+	public float passOutDuration = 5f;
 	public float timeToMaxDrunkness = 300f;
 
 	readonly List<VignetteParam> vignetteParams = [];
@@ -132,10 +132,21 @@ public class DrunkController : MonoBehaviour
 		float configPassOut = Utils.PConfig.drunk_passOutDuration.Value;
 		float configTimeToMax = Utils.PConfig.drunk_timeToMaxDrunkness.Value;
 
-		maxFallInterval = (configMaxFall > 0 && configMaxFall < 600) ? configMaxFall : 45f;
-		minFallInterval = (configMinFall > 0 && configMinFall < maxFallInterval) ? configMinFall : 10f;
-		passOutDuration = (configPassOut >= 0.5f && configPassOut <= 30f) ? configPassOut : 3f;
-		timeToMaxDrunkness = (configTimeToMax >= 30f && configTimeToMax <= 1800f) ? configTimeToMax : 300f;
+		maxFallInterval = (configMaxFall >= 1 && configMaxFall <= 600) 
+			? configMaxFall 
+			: 45f;
+
+		minFallInterval = (configMinFall >= 1 && configMinFall <= maxFallInterval) 
+			? configMinFall 
+			: 10f;
+
+		passOutDuration = (configPassOut >= 1f && configPassOut <= 30f) 
+			? configPassOut 
+			: 5f;
+
+		timeToMaxDrunkness = (configTimeToMax >= 30f && configTimeToMax <= 600f) 
+			? configTimeToMax 
+			: 300f;
 		
 		Debug.Log($"[DrunkController] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
 		
@@ -181,7 +192,7 @@ public class DrunkController : MonoBehaviour
 		drunkTimer = 0f;
 		drunkennessLevel = 0f;
 
-		StopAllCoroutines();
+		StopCoroutine(FallWithScreenShakeRepeater());
 
 		foreach (var param in vignetteParams)
 		{
