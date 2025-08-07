@@ -1,10 +1,10 @@
 ﻿# Komi Challenge
 
-A chaotic challenge mod for **PEAK**, originally forked from [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge), with custom tweaks for games among friends.
+A chaotic challenge mod for **PEAK**, originally forked from [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge), with custom tweaks I made for games with my friends.
 
 ### 💀 Available Debuffs
 
-At the start of each run, every player is randomly assigned one of the following debuffs:
+At the start of each run, every player choose one of the following debuffs:
 
 - **Deaf** – Can't hear anything.
 - **Blind** – Vision? Who needs it.
