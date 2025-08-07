@@ -1,6 +1,6 @@
 ﻿# Komi Challenge
 
-A chaotic challenge mod for **The PEAK**, originally forked from [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge), with custom tweaks for games among friends.
+A chaotic challenge mod for **PEAK**, originally forked from [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge), with custom tweaks for games among friends.
 
 ### 💀 Available Debuffs
 
