@@ -9,7 +9,7 @@ namespace KomiChallenge.Scripts;
 [HarmonyPatch]
 internal class MainGame
 {
-    public static bool enteredAwake = false;
+	public static bool enteredAwake = false;
 
 	/// <summary>
 	/// When the map area gets displayed, replace the text with the
@@ -76,9 +76,9 @@ internal class MainGame
 
 	[HarmonyPatch(typeof(Campfire), "Awake")]
 	[HarmonyPostfix]
-    static void InGame()
-    {
-        if (enteredAwake) return;
+	static void InGame()
+	{
+		if (enteredAwake) return;
 
 		int localId = PhotonNetwork.LocalPlayer.ActorNumber;
 		if (RoleManager.players.ContainsKey(localId)) return;
@@ -87,8 +87,8 @@ internal class MainGame
 		uiGO.AddComponent<UI.RoleSelectionUI>();
 
 		GUIManager.instance.StartCoroutine(AssignDebuffs());
-        enteredAwake = true;
-    }
+		enteredAwake = true;
+	}
 
 	///// <summary>
 	///// If user looks at campfire, their debuff will be removed
@@ -128,27 +128,27 @@ internal class MainGame
 	/// Remove all debuffs once player dies
 	/// </summary>
 	[HarmonyPatch(typeof(Character), nameof(Character.RPCA_Die))]
-    [HarmonyPostfix]
-    static void PlayerDiedPatch()
-    {
-        Character chr = Character.localCharacter;
+	[HarmonyPostfix]
+	static void PlayerDiedPatch()
+	{
+		Character chr = Character.localCharacter;
 
-        if (!chr.data.dead) return;
-    
-        RoleManager.RemoveAllDebuffs();
-        Debug.Log(">>> You died (rip)");
-    }
+		if (!chr.data.dead) return;
+	
+		RoleManager.RemoveAllDebuffs();
+		Debug.Log(">>> You died (rip)");
+	}
 
-    static void ResetVars(string msg = "")
-    {  
-        RoleManager.RemoveAllDebuffs();
-        RoleManager.players.Clear();
-        enteredAwake = false;
-        Debug.Log($">>> {msg}");
-    }
+	static void ResetVars(string msg = "")
+	{  
+		RoleManager.RemoveAllDebuffs();
+		RoleManager.players.Clear();
+		enteredAwake = false;
+		Debug.Log($">>> {msg}");
+	}
 
-    static void SetRoles()
-    {
+	static void SetRoles()
+	{
 		int localID = Character.localCharacter.gameObject.GetComponent<PhotonView>().Owner.ActorNumber;
 		if (RoleManager.players.ContainsKey(localID))
 		{

@@ -12,9 +12,9 @@ public class RoleManager
 
 	public enum RoleType
 	{
-        blind,
-        deaf,
-        mute,
+		blind,
+		deaf,
+		mute,
 		drunk,
 		drugs,
 		clumsy,

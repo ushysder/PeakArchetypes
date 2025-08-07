@@ -10,19 +10,19 @@ namespace KomiChallenge;
 [BepInPlugin(modGUID, modName, modVersion)]
 public class Plugin : BaseUnityPlugin
 {
-    public const string modGUID = "KomiChallenge.ushysder";
-    public const string modName = "KomiChallenge";
-    public const string modVersion = "0.2.0";
-    readonly Harmony _harmony = new(modGUID);
-    internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
-    public static int localID;
+	public const string modGUID = "KomiChallenge.ushysder";
+	public const string modName = "KomiChallenge";
+	public const string modVersion = "0.2.0";
+	readonly Harmony _harmony = new(modGUID);
+	internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
+	public static int localID;
 
-    void Awake()
-    {
-        PConfig.AllConfigs(Config);
-        PatchAllStuff();
-        RoleManager.AppendRoles();
-    }
+	void Awake()
+	{
+		PConfig.AllConfigs(Config);
+		PatchAllStuff();
+		RoleManager.AppendRoles();
+	}
 
-    void PatchAllStuff() => _harmony.PatchAll(Assembly.GetExecutingAssembly());
+	void PatchAllStuff() => _harmony.PatchAll(Assembly.GetExecutingAssembly());
 }
