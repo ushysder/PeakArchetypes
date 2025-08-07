@@ -5,9 +5,12 @@ Debuffs:
 - Deaf
 - Blind
 - Mute
+- Drunk
+- Clumsy
 
-Everyone will be given one of these debuffs once the game starts.
+Everyone can select one of these debuffs once the game starts.
 If you can make it to at least the first campfire then your team is epic.
+You can do a full run. The debuff are re-applied once you're revived.
 
 This mod was inspired by this video: https://www.youtube.com/watch?v=MpWyEgb2c6Y
 
