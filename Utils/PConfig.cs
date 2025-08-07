@@ -20,6 +20,13 @@ public class PConfig
 
 	#endregion ClumsySettings
 
+	#region NarcolepticSettings
+
+	public static ConfigEntry<float> narco_timeToFullDrowsy;
+	public static ConfigEntry<float> narco_passOutDuration;
+
+	#endregion NarcolepticSettings
+
 	public static void AllConfigs(ConfigFile cfg)
 	{
 		drunk_maxFallInterval = cfg.Bind(
@@ -45,5 +52,13 @@ public class PConfig
 		clumsy_InvertMaxTime = cfg.Bind(
 			"ClumsySettings", "InvertMaxTime", 30f,
 			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
+
+		narco_timeToFullDrowsy = cfg.Bind(
+			"NarcolepticSettings", "TimeToFullDrowsy", 300f,
+			"Seconds it takes for Drowsy status to reach full and cause pass out. [Min: 30, Max: 600]");
+
+		narco_passOutDuration = cfg.Bind(
+			"NarcolepticSettings", "PassOutDuration", 5f,
+			"Duration the player stays passed out after max Drowsy is reached. [Min: 1, Max: 30]");
 	}
 }

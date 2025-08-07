@@ -18,7 +18,8 @@ public class RoleManager
 		drunk,
 		drugs,
 		clumsy,
-		nothing
+		nothing,
+		narcoleptic
 	}
 
 	public static void AppendRoles()
@@ -61,6 +62,11 @@ public class RoleManager
 		"Maladroit",
 		"Fais attention où tu mets les pieds.",
 		RoleType.clumsy));
+
+		defaultTypes.Add(new Role(
+		"Narcoleptique",
+		"Si tu trouves quelqu’un qui ronfle, c’est sûrement toi !",
+		RoleType.narcoleptic));
 	}
 
 	public static void ReapplyDebuffs()
@@ -76,7 +82,8 @@ public class RoleManager
 		character.GetComponent<ClumsyEffects>(),
 		character.GetComponent<BlindEffect>(),
 		character.GetComponent<DeafEffect>(),
-		character.GetComponent<MuteEffect>()
+		character.GetComponent<MuteEffect>(),
+		character.GetComponent<NarcolepticEffect>()
 		};
 
 		foreach (var debuff in debuffs)
@@ -100,7 +107,8 @@ public class RoleManager
 				effect is MuteEffect ||
 				effect is DrunkController ||
 				effect is ClumsyEffects ||
-				effect is DrugsEffects)
+				effect is DrugsEffects ||
+				effect is NarcolepticEffect) 
 			{
 				effect.enabled = false;
 			}

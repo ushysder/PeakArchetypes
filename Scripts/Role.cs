@@ -53,6 +53,10 @@ public class Role : MonoBehaviour
 				break;
 			case RoleType.nothing:
 				break;
+			case RoleType.narcoleptic:
+				if (character.GetComponent<NarcolepticEffect>() == null)
+					character.gameObject.AddComponent<NarcolepticEffect>();
+				break;
 		}
 	}
 }

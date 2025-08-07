@@ -78,8 +78,8 @@ public class RoleSelectionUI : MonoBehaviour
 
 	void Update()
 	{
-		// Role selection: support top-row & numpad keys (1–7)
-		for (int i = 0; i < 7; i++)
+		// Role selection: support top-row & numpad keys
+		for (int i = 0; i < 8; i++)
 		{
 			KeyCode alphaKey = KeyCode.Alpha1 + i;
 			KeyCode keypadKey = KeyCode.Keypad1 + i;
@@ -111,7 +111,7 @@ public class RoleSelectionUI : MonoBehaviour
 			text += $"{prefix}<b>{i + 1}</b>. {RoleList[i].RoleName} - {RoleList[i].Desc}\n";
 		}
 
-		text += "\nAppuyez sur un chiffre (1-7) pour choisir, puis Entrée pour confirmer.";
+		text += "\nAppuyez sur un chiffre (1-8) pour choisir, puis Entrée pour confirmer.";
 		displayText.text = text;
 	}
 }
