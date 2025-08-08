@@ -1,4 +1,6 @@
 ﻿using KomiChallenge.Scripts.Roles;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static KomiChallenge.Scripts.RoleManager;
 
@@ -6,57 +8,63 @@ namespace KomiChallenge.Scripts;
 
 public class Role : MonoBehaviour
 {
-	public RoleType RoleType { get; set; }
-	public string RoleName { get; set; }
-	public string Desc { get; set; }
+	static readonly Dictionary<RoleType, Type> roleComponentMap = new()
+	{
+		{ RoleType.blind, typeof(BlindEffect) },
+		{ RoleType.deaf, typeof(DeafEffect) },
+		{ RoleType.mute, typeof(MuteEffect) },
+		{ RoleType.clumsy, typeof(ClumsyEffects) },
+		{ RoleType.drunk, typeof(DrunkController) },
+		{ RoleType.drugs, typeof(DrugsEffects) },
+		{ RoleType.narcoleptic, typeof(NarcolepticEffect) }
+		// RoleType.nothing is intentionally excluded
+	};
 
 	public Role(string roleName, string desc, RoleType roleType)
 	{
 		RoleName = roleName;
 		Desc = desc;
 		RoleType = roleType;
-
 	}
 
-	void Start() => GiveDebuff();
+	public string Desc { get; set; }
+	public string RoleName { get; set; }
+	public RoleType RoleType { get; set; }
 
-	public void GiveDebuff()
+	#region Unity Methods
+
+	void OnDestroy() => ApplyRoleEffect(false);
+
+	void Start() => ApplyRoleEffect(true);
+
+	#endregion Unity Methods
+
+	#region Role Methods
+
+	void ApplyRoleEffect(bool add)
 	{
-		var character = GameHelpers.GetCharacterComponent();
+		var character = Character.localCharacter;
 		if (character == null) return;
 
-		switch (RoleType)
+		var characterGO = character.gameObject;
+
+		// Skip if role has no effect mapped
+		if (!roleComponentMap.TryGetValue(RoleType, out var componentType) || componentType == null)
+			return;
+
+		var existing = characterGO.GetComponent(componentType);
+
+		if (add)
 		{
-			case RoleType.blind:
-				if (character.GetComponent<BlindEffect>() == null)
-					character.gameObject.AddComponent<BlindEffect>();
-				break;
-			case RoleType.deaf:
-				if (character.GetComponent<DeafEffect>() == null)
-					character.gameObject.AddComponent<DeafEffect>();
-				break;
-			case RoleType.mute:
-				if (character.GetComponent<MuteEffect>() == null)
-					character.gameObject.AddComponent<MuteEffect>();
-				break;
-			case RoleType.clumsy:
-				if (character.GetComponent<ClumsyEffects>() == null)
-					character.gameObject.AddComponent<ClumsyEffects>();
-				break;
-			case RoleType.drunk:
-				if (character.GetComponent<DrunkController>() == null)
-					character.gameObject.AddComponent<DrunkController>();
-				break;
-			case RoleType.drugs:
-				if (character.GetComponent<DrugsEffects>() == null)
-					character.gameObject.AddComponent<DrugsEffects>();
-				break;
-			case RoleType.nothing:
-				break;
-			case RoleType.narcoleptic:
-				if (character.GetComponent<NarcolepticEffect>() == null)
-					character.gameObject.AddComponent<NarcolepticEffect>();
-				break;
+			if (existing == null)
+				characterGO.AddComponent(componentType);
+		}
+		else
+		{
+			if (existing != null)
+				Destroy(existing);
 		}
 	}
+
+	#endregion Role Methods
 }

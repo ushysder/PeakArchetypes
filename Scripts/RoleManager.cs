@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using KomiChallenge.Scripts.Roles;
+﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KomiChallenge.Scripts;
@@ -69,51 +69,27 @@ public class RoleManager
 		RoleType.narcoleptic));
 	}
 
-	public static void ReapplyDebuffs()
+	public static void ApplyDebuffs()
 	{
-		var character = GameHelpers.GetCharacterComponent();
-		if (character == null) return;
-
-		// Re-enable all debuff components (if they still exist but are disabled)
-		var debuffs = new MonoBehaviour[]
+		int localID = Character.localCharacter.gameObject.GetComponent<PhotonView>().Owner.ActorNumber;
+		if (players.ContainsKey(localID))
 		{
-		character.GetComponent<DrugsEffects>(),
-		character.GetComponent<DrunkController>(),
-		character.GetComponent<ClumsyEffects>(),
-		character.GetComponent<BlindEffect>(),
-		character.GetComponent<DeafEffect>(),
-		character.GetComponent<MuteEffect>(),
-		character.GetComponent<NarcolepticEffect>()
-		};
+			Role plrRole = Character.localCharacter.gameObject.GetComponent<Role>();
+			if (plrRole == null)
+				plrRole = Character.localCharacter.gameObject.AddComponent<Role>();
 
-		foreach (var debuff in debuffs)
-		{
-			if (debuff != null)
-				debuff.enabled = true;
+			plrRole.RoleName = players[localID].RoleName;
+			plrRole.RoleType = players[localID].RoleType;
+			plrRole.Desc = players[localID].Desc;
 		}
-
-		Debug.Log("[AssignRoles] Debuffs re-applied to character.");
+		Debug.Log("[AssignRoles] Debuffs applied to character.");
 	}
 
-	public static void RemoveAllDebuffs()
+	public static void RemoveDebuffs()
 	{
-		var character = GameHelpers.GetCharacterComponent();
-		if (character == null) return;
+		Role plrRole = Character.localCharacter.GetComponent<Role>();
+		Object.Destroy(plrRole);
 
-		foreach (var effect in character.GetComponents<MonoBehaviour>())
-		{
-			if (effect is BlindEffect ||
-				effect is DeafEffect ||
-				effect is MuteEffect ||
-				effect is DrunkController ||
-				effect is ClumsyEffects ||
-				effect is DrugsEffects ||
-				effect is NarcolepticEffect) 
-			{
-				effect.enabled = false;
-			}
-		}
-
-		Debug.Log("[AssignRoles] All debuffs removed from character.");
+		Debug.Log("[AssignRoles] Debuffs removed from character.");
 	}
 }
