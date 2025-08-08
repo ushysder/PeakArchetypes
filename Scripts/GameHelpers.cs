@@ -3,7 +3,6 @@
 internal static class GameHelpers
 {
 	static Character character;
-	static CharacterMovement movementComponent;
 	
 	public static Character GetCharacterComponent()
 	{
@@ -11,13 +10,5 @@ internal static class GameHelpers
 			character = Character.localCharacter;
 		
 		return character;
-	}
-
-	public static CharacterMovement GetMovementComponent()
-	{
-		if (movementComponent == null || !movementComponent.isActiveAndEnabled)
-			movementComponent = GetCharacterComponent()?.GetComponent<CharacterMovement>();
-		
-		return movementComponent;
 	}
 }
