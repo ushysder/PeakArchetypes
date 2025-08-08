@@ -10,40 +10,131 @@ namespace KomiChallenge.Scripts.Roles;
 
 public class DrunkController : MonoBehaviour
 {
-	[Range(0f, 1f)]
-	public float drunkennessLevel = 0f;
-	public float maxFallInterval = 45f;
-	public float minFallInterval = 10f;
-	public float passOutDuration = 5f;
-	public float timeToMaxDrunkness = 300f;
-
 	readonly List<VignetteParam> vignetteParams = [];
+
 	Character character;
+
+	[Range(0f, 1f)]
+	float drunkennessLevel;
 	float drunkTimer = 0f;
 	bool isDrunk = false;
-	bool isInitialized = false;
+	float maxFallInterval;
+	float minFallInterval;
 	bool passedOut = false;
-
+	float passOutDuration;
+	float timeToMaxDrunkness;
 	VolumeComponent vignetteEffect;
 	Volume vignetteVolume;
 
-	IEnumerator FallWithScreenShakeRepeater()
+	#region Unity Methods
+
+	void Initialize()
+	{
+		float configMaxFall = Utils.PConfig.drunk_maxFallInterval.Value;
+		float configMinFall = Utils.PConfig.drunk_minFallInterval.Value;
+		float configPassOut = Utils.PConfig.drunk_passOutDuration.Value;
+		float configTimeToMax = Utils.PConfig.drunk_timeToMaxDrunkness.Value;
+
+		maxFallInterval = (configMaxFall >= 1 && configMaxFall <= 600)
+			? configMaxFall
+			: 45f;
+
+		minFallInterval = (configMinFall >= 1 && configMinFall <= maxFallInterval)
+			? configMinFall
+			: 10f;
+
+		passOutDuration = (configPassOut >= 1f && configPassOut <= 30f)
+			? configPassOut
+			: 5f;
+
+		timeToMaxDrunkness = (configTimeToMax >= 30f && configTimeToMax <= 600f)
+			? configTimeToMax
+			: 300f;
+
+		Debug.Log($"[DrunkController] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
+
+		FindVignetteEffect();
+
+		character = GameHelpers.GetCharacterComponent();
+		if (character == null)
+		{
+			Debug.LogWarning("[DrunkController] No Character component found.");
+			enabled = false;
+			return;
+		}
+
+		isDrunk = true;
+
+		Debug.Log("[DrunkController] Initialized and ready to go.");
+	}
+
+	void OnDestroy()
+	{
+		isDrunk = false;
+		passedOut = false;
+		drunkTimer = 0f;
+		drunkennessLevel = 0f;
+
+		StopCoroutine(DrunkRoutine());
+
+		foreach (var param in vignetteParams)
+		{
+			if (param.valueProp != null)
+			{
+				if (param.valueProp.PropertyType == typeof(float))
+					param.valueProp.SetValue(param.param, 0f);
+				else if (param.valueProp.PropertyType == typeof(bool))
+					param.valueProp.SetValue(param.param, false);
+			}
+
+			param.overrideProp?.SetValue(param.param, false);
+		}
+
+		if (vignetteVolume != null)
+			vignetteVolume.isGlobal = false;
+
+		Debug.Log($"[DrunkController] Reset complete on destroy.");
+	}
+
+	void Start()
+	{
+		Initialize();
+		StartCoroutine(DrunkRoutine());
+		Debug.Log("[DrunkController] Drunk Effects started.");
+	}
+
+	#endregion
+
+	#region Role Methods
+
+	IEnumerator DrunkRoutine()
 	{
 		Debug.Log("[DrunkController] Coroutine started.");
 
-		var photonView = character.photonView;
+		var view = character.refs.view;
 
 		while (isDrunk)
 		{
 			float drunkProgress = Mathf.Clamp01(drunkTimer / timeToMaxDrunkness);
 			float currentInterval = Mathf.Lerp(maxFallInterval, minFallInterval, drunkProgress);
-			yield return new WaitForSeconds(currentInterval);
+			float elapsed = 0f;
 
-			// Owner sends fall RPC
-			if (!passedOut && character != null && photonView != null && photonView.IsMine)
+			while (elapsed < currentInterval && isDrunk && !passedOut)
+			{
+				// Per-frame drunkness progression
+				drunkTimer += Time.deltaTime;
+				drunkProgress = Mathf.Clamp01(drunkTimer / timeToMaxDrunkness);
+				drunkennessLevel = drunkProgress;
+				UpdateVignette(drunkennessLevel);
+
+				elapsed += Time.deltaTime;
+				yield return null; // wait for next frame
+			}
+
+			if (!passedOut && character != null && view != null && view.IsMine)
 			{
 				Debug.Log($"[DrunkController] Falling... drunkenness level: {drunkProgress:F2}");
-				photonView.RPC(nameof(Character.RPCA_FallWithScreenShake), RpcTarget.All, 0.5f, 5f);
+				view.RPC(nameof(Character.RPCA_FallWithScreenShake), PhotonNetwork.LocalPlayer, 0.5f, 5f);
 			}
 
 			if (!passedOut && drunkProgress >= 1f)
@@ -52,18 +143,15 @@ public class DrunkController : MonoBehaviour
 				passedOut = true;
 				isDrunk = false;
 
-				if (photonView != null && photonView.IsMine)
-					photonView.RPC(nameof(Character.RPCA_PassOut), RpcTarget.All);
-				
+				if (view != null && view.IsMine)
+					view.RPC(nameof(Character.RPCA_PassOut), PhotonNetwork.LocalPlayer);
+
 				yield return new WaitForSeconds(passOutDuration);
 
 				Debug.Log("[DrunkController] Recovering from pass out.");
 
-				if (photonView != null && photonView.IsMine)
-				{
-					// Optional: use Photon RPC if UnPassOut also needs to sync
-					character.photonView.RPC("RPCA_UnPassOut", RpcTarget.All);
-				}
+				if (view != null && view.IsMine)
+					view.RPC("RPCA_UnPassOut", PhotonNetwork.LocalPlayer);
 
 				drunkTimer = 0f;
 				isDrunk = true;
@@ -123,106 +211,6 @@ public class DrunkController : MonoBehaviour
 		Debug.LogWarning("[DrunkController] No vignette effect found.");
 	}
 
-	void Initialize()
-	{
-		if (isInitialized) return;
-
-		float configMaxFall = Utils.PConfig.drunk_maxFallInterval.Value;
-		float configMinFall = Utils.PConfig.drunk_minFallInterval.Value;
-		float configPassOut = Utils.PConfig.drunk_passOutDuration.Value;
-		float configTimeToMax = Utils.PConfig.drunk_timeToMaxDrunkness.Value;
-
-		maxFallInterval = (configMaxFall >= 1 && configMaxFall <= 600) 
-			? configMaxFall 
-			: 45f;
-
-		minFallInterval = (configMinFall >= 1 && configMinFall <= maxFallInterval) 
-			? configMinFall 
-			: 10f;
-
-		passOutDuration = (configPassOut >= 1f && configPassOut <= 30f) 
-			? configPassOut 
-			: 5f;
-
-		timeToMaxDrunkness = (configTimeToMax >= 30f && configTimeToMax <= 600f) 
-			? configTimeToMax 
-			: 300f;
-		
-		Debug.Log($"[DrunkController] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
-		
-		FindVignetteEffect();
-
-		character = GetComponent<Character>();
-		if (character == null)
-		{
-			Debug.LogWarning("[DrunkController] No Character component found.");
-			enabled = false;
-			return;
-		}
-
-		isDrunk = true;
-		StartCoroutine(FallWithScreenShakeRepeater());
-
-		isInitialized = true;
-		Debug.Log("[DrunkController] Initialized and ready to go.");
-	}
-
-	void OnDestroy() => Reset("Destroy");
-
-	void OnDisable() => Reset("Disable");
-
-	void OnEnable()
-	{
-		if (!isInitialized)
-			Initialize();
-
-		if (character != null && !isDrunk)
-		{
-			isDrunk = true;
-			StartCoroutine(FallWithScreenShakeRepeater());
-		}
-
-		Debug.Log("[DrunkController] Drunk Effects enabled.");
-	}
-
-	void Reset(string msg)
-	{
-		isDrunk = false;
-		passedOut = false;
-		drunkTimer = 0f;
-		drunkennessLevel = 0f;
-
-		StopCoroutine(FallWithScreenShakeRepeater());
-
-		foreach (var param in vignetteParams)
-		{
-			if (param.valueProp != null)
-			{
-				if (param.valueProp.PropertyType == typeof(float))
-					param.valueProp.SetValue(param.param, 0f);
-				else if (param.valueProp.PropertyType == typeof(bool))
-					param.valueProp.SetValue(param.param, false);
-			}
-
-			param.overrideProp?.SetValue(param.param, false);
-		}
-
-		if (vignetteVolume != null)
-			vignetteVolume.isGlobal = false;
-
-		Debug.Log($"[DrunkController] Reset complete on {msg}.");
-	}
-
-	void Update()
-	{
-		if (isDrunk && !passedOut)
-		{
-			drunkTimer += Time.deltaTime;
-			drunkennessLevel = Mathf.Clamp01(drunkTimer / timeToMaxDrunkness);
-			UpdateVignette(drunkennessLevel);
-		}
-	}
-
 	void UpdateVignette(float level)
 	{
 		if (vignetteEffect == null || vignetteParams.Count == 0) return;
@@ -244,6 +232,8 @@ public class DrunkController : MonoBehaviour
 			}
 		}
 	}
+
+	#endregion
 
 	struct VignetteParam
 	{
