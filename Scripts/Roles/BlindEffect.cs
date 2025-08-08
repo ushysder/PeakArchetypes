@@ -14,20 +14,6 @@ public class BlindEffect : MonoBehaviour
 		Debug.Log("[BlindEffect] Blind effect destroyed.");
 	}
 
-	void OnDisable()
-	{
-		if (blackScreen != null)
-			blackScreen.SetActive(false);
-		Debug.Log("[BlindEffect] Blind effect disabled.");
-	}
-
-	void OnEnable()
-	{
-		if (blackScreen != null)
-			blackScreen.SetActive(true);
-		Debug.Log("[BlindEffect] Blind effect enabled.");
-	}
-
 	void Start()
 	{
 		GameObject parent = GameObject.Find("GAME/GUIManager/Canvas_HUD");
