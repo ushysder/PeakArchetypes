@@ -11,12 +11,14 @@ At the start of each run, every player choose one of the following debuffs:
 - **Mute** – Say goodbye to your voice lines.
 - **Drunk** – Randomly falls over. Cheers!
 - **Clumsy** – Occasionally loses control as movement inputs are suddenly inverted.
-- **Junky** – Sees the world differently.
+- **Junky** – Sees the world differently and can die of overdose.
 - **Narcoleptic** – Gradually drifts off and collapses into sleep.
 
 Survive with these conditions... if you can.
 
 Debuffs are **re-applied** after being revived — no easy escapes!
+
+The player can also choose to play without any debuff.
 
 ---
 

@@ -4,6 +4,14 @@ namespace KomiChallenge.Utils;
 
 public class PConfig
 {
+	#region ClumsySettings
+
+	public static ConfigEntry<float> clumsy_InvertMaxTime;
+	public static ConfigEntry<float> clumsy_InvertMinTime;
+	public static ConfigEntry<int> clumsy_ItemDropChancePercent;
+
+	#endregion ClumsySettings
+
 	#region DrunkSettings
 
 	public static ConfigEntry<float> drunk_maxFallInterval;
@@ -13,23 +21,33 @@ public class PConfig
 
 	#endregion DrunkSettings
 
-	#region ClumsySettings
+	#region DrugsSettings
 
-	public static ConfigEntry<float> clumsy_InvertMinTime;
-	public static ConfigEntry<float> clumsy_InvertMaxTime;
-	public static ConfigEntry<int> clumsy_ItemDropChancePercent;
+	public static ConfigEntry<float> drugs_timeToFullPoison;
 
-	#endregion ClumsySettings
+	#endregion DrugsSettings
 
 	#region NarcolepticSettings
 
-	public static ConfigEntry<float> narco_timeToFullDrowsy;
 	public static ConfigEntry<float> narco_passOutDuration;
+	public static ConfigEntry<float> narco_timeToFullDrowsy;
 
 	#endregion NarcolepticSettings
 
 	public static void AllConfigs(ConfigFile cfg)
 	{
+		clumsy_InvertMinTime = cfg.Bind(
+			"ClumsySettings", "InvertMinTime", 10f,
+			"Minimum time before inversion changes (seconds). [Min: 1, Max: 60]");
+
+		clumsy_InvertMaxTime = cfg.Bind(
+			"ClumsySettings", "InvertMaxTime", 30f,
+			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
+
+		clumsy_ItemDropChancePercent = cfg.Bind(
+			"ClumsySettings", "ItemDropChancePercent", 50,
+			"Chance (in percent) to drop a random item when inversion changes. [0 = never, 100 = always]");
+
 		drunk_maxFallInterval = cfg.Bind(
 			"DrunkSettings", "MaxFallInterval", 45f,
 			"Max interval between falls at lowest drunkenness (in seconds). [Min: 1, Max: 600]");
@@ -46,17 +64,9 @@ public class PConfig
 			"DrunkSettings", "TimeToMaxDrunkness", 300f,
 			"Time to reach full drunkenness (in seconds). [Min: 30, Max: 600]");
 
-		clumsy_InvertMinTime = cfg.Bind(
-			"ClumsySettings", "InvertMinTime", 10f,
-			"Minimum time before inversion changes (seconds). [Min: 1, Max: 60]");
-
-		clumsy_InvertMaxTime = cfg.Bind(
-			"ClumsySettings", "InvertMaxTime", 30f,
-			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
-
-		clumsy_ItemDropChancePercent = cfg.Bind(
-			"ClumsySettings", "ItemDropChancePercent", 50,
-			"Chance (in percent) to drop a random item when inversion changes. [0 = never, 100 = always]");
+		drugs_timeToFullPoison = cfg.Bind(
+			"DrugsSettings", "TimeToFullPoison", 900f,
+			"Seconds it takes for Poison status to reach full overdose (poison = 1). [Min: 600, Max: 1800]");
 
 		narco_timeToFullDrowsy = cfg.Bind(
 			"NarcolepticSettings", "TimeToFullDrowsy", 300f,

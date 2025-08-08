@@ -3,6 +3,12 @@ using UnityEngine.Rendering;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using Photon.Pun;
+using static CharacterAfflictions;
+using System.Collections;
+using Random = UnityEngine.Random;
+using KomiChallenge.Utils;
+using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles;
 
@@ -10,10 +16,48 @@ public class DrugsEffects : MonoBehaviour
 {
 	readonly List<EffectParam> drugsParams = [];
 
+	readonly float maxPoison = 1f;
+
+	CharacterAfflictions afflictions;
+	Character character;
+
+	float originalPoisonReductionCooldown;
+	float originalPoisonReductionPerSecond;
+
+	float poisonIncreasePerSecond;
+
 	#region Unity Methods
 
 	void Initialize()
 	{
+		character = GameHelpers.GetCharacterComponent();
+		if (character == null)
+		{
+			Debug.LogError("[DrugsEffects] Character component not found — disabling.");
+			enabled = false;
+			return;
+		}
+
+		afflictions = character.refs.afflictions;
+		if (afflictions == null)
+		{
+			Debug.LogError("[DrugsEffects] CharacterAfflictions not found — disabling.");
+			enabled = false;
+			return;
+		}
+
+		float configTimeToFull = PConfig.drugs_timeToFullPoison.Value;
+
+		configTimeToFull = (configTimeToFull >= 600f && configTimeToFull <= 1800f)
+			? configTimeToFull
+			: 900f;
+
+		poisonIncreasePerSecond = maxPoison / configTimeToFull;
+
+		Debug.Log($"[DrugsEffects] poisonIncreasePerSecond set to {poisonIncreasePerSecond} (time to full: {configTimeToFull}s)");
+
+		SaveAndDisablePoisonDecay();
+
 		var volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
 		if (volumes.Length == 0)
 		{
@@ -33,14 +77,22 @@ public class DrugsEffects : MonoBehaviour
 				string effectName = effect.GetType().Name.ToLower();
 				if (effectName != "hbao") continue;
 
-				// Enable the effect if it has an 'active' property
 				var activeProp = effect.GetType().GetProperty("active", BindingFlags.Public | BindingFlags.Instance);
 				activeProp?.SetValue(effect, true);
 
 				var fields = effect.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+				var fieldsToEdit = new HashSet<string>
+				{
+					"debugMode"
+				};
+
 				foreach (var field in fields)
 				{
 					if (!typeof(VolumeParameter).IsAssignableFrom(field.FieldType)) continue;
+
+					if (!fieldsToEdit.Contains(field.Name))
+						continue;
 
 					var volumeParam = field.GetValue(effect);
 					if (volumeParam == null) continue;
@@ -49,16 +101,16 @@ public class DrugsEffects : MonoBehaviour
 					var overrideProp = volumeParam.GetType().GetProperty("overrideState", BindingFlags.Public | BindingFlags.Instance);
 					if (valueProp == null || overrideProp == null) continue;
 
-					object newValue = GetDrugsValue(effectName, field.Name.ToLower(), valueProp.PropertyType);
-					if (newValue == null) continue;
-
 					// Cache original value before overriding
 					object originalValue = valueProp.GetValue(volumeParam);
 
+					Type enumType = valueProp.PropertyType;
+					object viewNormalsValue = Enum.Parse(enumType, "ViewNormals");
+
 					// Set override and value
 					overrideProp.SetValue(volumeParam, true);
-					valueProp.SetValue(volumeParam, newValue);
-
+					valueProp.SetValue(volumeParam, viewNormalsValue);
+					
 					drugsParams.Add(new EffectParam
 					{
 						volumeParam = volumeParam,
@@ -69,7 +121,7 @@ public class DrugsEffects : MonoBehaviour
 						effect = effect
 					});
 
-					Debug.Log($"[DrugsEffects] Set '{field.Name}' on '{effectName}' to '{newValue}'.");
+					Debug.Log($"[DrugsEffects] Set '{field.Name}' on '{effectName}' to '{viewNormalsValue}'.");
 				}
 			}
 		}
@@ -79,25 +131,24 @@ public class DrugsEffects : MonoBehaviour
 	{
 		foreach (var param in drugsParams)
 		{
-			// Reset override and value to original
 			param.overrideProp?.SetValue(param.volumeParam, false);
 
 			if (param.originalValue != null && param.valueProp != null)
 				param.valueProp.SetValue(param.volumeParam, param.originalValue);
-			
-			// Reset the volume itself
+
 			if (param.volume != null)
 				param.volume.isGlobal = false;
 		}
 
 		drugsParams.Clear();
 
-		Debug.Log($"[DrugsEffects] Reset complete on destroy.");
+		Debug.Log("[DrugsEffects] Reset complete on destroy.");
 	}
 
 	void Start()
 	{
 		Initialize();
+		StartCoroutine(DrugsRoutine());
 		Debug.Log("[DrugsEffects] Drugs effects started.");
 	}
 
@@ -105,40 +156,69 @@ public class DrugsEffects : MonoBehaviour
 
 	#region Role Methods
 
-	object GetDrugsValue(string effectName, string fieldName, Type fieldType)
+	object GetDrugsValue(Type fieldType)
 	{
-		string effect = effectName.ToLower();
-		string name = fieldName.ToLower();
-
-		if (fieldType == typeof(float))
-		{
-			if (effect.Contains("blur") && name.Contains("amount")) return 200f;
-			if (effect.Contains("motionblur") && name.Contains("intensity")) return 100f;
-			if (effect.Contains("motionblur") && name.Contains("clamp")) return 100f;
-			if (effect.Contains("doublevision") && name.Contains("intensity")) return 100f;
-		}
-		else if (fieldType == typeof(bool))
-		{
+		if (fieldType == typeof(bool))
 			return true;
-		}
 		else if (fieldType.IsEnum)
 		{
 			var values = Enum.GetValues(fieldType);
 			return values.GetValue(values.Length - 1); // Most intense
 		}
 
-		return null; // fallback
+		return null;
+	}
+
+	IEnumerator DrugsRoutine()
+	{
+		var view = character.refs.view;
+
+		while (true)
+		{
+			float currentPoison = afflictions.GetCurrentStatus(STATUSTYPE.Poison);
+
+			if (currentPoison < maxPoison)
+				afflictions.AddStatus(STATUSTYPE.Poison, poisonIncreasePerSecond * Time.deltaTime);
+			else
+			{
+				if (view != null && view.IsMine)
+				{
+					Transform hip = character.refs.hip.transform;
+					Vector3 forward = hip.forward;
+
+					if (Vector3.Dot(forward, Vector3.up) < 0f)
+						forward = -forward;
+
+					Vector3 dropPos = hip.position + forward * 0.6f;
+					dropPos += Vector3.up * Random.Range(0f, 0.5f);
+
+					view.RPC(nameof(Character.RPCA_Die), PhotonNetwork.LocalPlayer, dropPos);
+
+					Debug.Log("[DrugsEffects] Player overdosed and died.");
+				}
+				yield break; // Stop coroutine after death
+			}
+
+			yield return null;
+		}
+	}
+
+	void RestorePoisonDecay()
+	{
+		afflictions.poisonReductionPerSecond = originalPoisonReductionPerSecond;
+		afflictions.poisonReductionCooldown = originalPoisonReductionCooldown;
+		Debug.Log("[DrugsEffects] Poison decay restored to original values.");
+	}
+
+	void SaveAndDisablePoisonDecay()
+	{
+		originalPoisonReductionPerSecond = afflictions.poisonReductionPerSecond;
+		originalPoisonReductionCooldown = afflictions.poisonReductionCooldown;
+
+		afflictions.poisonReductionPerSecond = 0f;
+		afflictions.poisonReductionCooldown = 999999f;
+		Debug.Log("[DrugsEffects] Poison decay disabled for overdose effect.");
 	}
 
 	#endregion Role Methods
-
-	class EffectParam
-	{
-		public VolumeComponent effect;
-		public object originalValue;
-		public PropertyInfo overrideProp;
-		public PropertyInfo valueProp;
-		public Volume volume;
-		public object volumeParam;
-	}
 }

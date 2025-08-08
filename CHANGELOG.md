@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.3.2
+
+Drugged now can overdose and die if they stack too much poison
+
 # 0.3.1
 
 Clumsy now can lose a random item when the inversion happens
