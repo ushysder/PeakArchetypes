@@ -80,7 +80,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			validatedMaxTime = (PConfig.clumsy_InvertMaxTime.Value >= validatedMinTime && PConfig.clumsy_InvertMaxTime.Value <= 120f)
 				? PConfig.clumsy_InvertMaxTime.Value
-				: Mathf.Max(validatedMinTime, 120f);
+				: Mathf.Max(validatedMinTime, 30f);
 
 			validatedDropChance = (PConfig.clumsy_ItemDropChancePercent.Value >= 0 && PConfig.clumsy_ItemDropChancePercent.Value <= 100)
 				? PConfig.clumsy_ItemDropChancePercent.Value

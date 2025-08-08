@@ -1,3 +1,10 @@
+# Changelog
+
+# 0.3.1
+
+Clumsy now can lose a random item when the inversion happens
+Bugfixes
+
 # 0.3.0
 
 Added new role : Narcoleptic
