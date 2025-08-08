@@ -1,163 +1,178 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using KomiChallenge.Utils;
+using Photon.Pun;
+using System.Collections.Generic;
+using Zorro.Core;
 
-namespace KomiChallenge.Scripts.Roles;
-
-internal class ClumsyEffects : MonoBehaviour
+namespace KomiChallenge.Scripts.Roles
 {
-	object characterMovement;
-
-	// === Clumsy Movement ===
-	float invertTimer = 0f;
-	bool invertX = false;
-	bool invertY = false;
-
-	FieldInfo invertXField;
-	FieldInfo invertYField;
-	Type movementType;
-	PropertyInfo valuePropX;
-	PropertyInfo valuePropY;
-
-	float validatedMinTime;
-	float validatedMaxTime;
-
-	void OnEnable()
+	internal class ClumsyEffects : MonoBehaviour
 	{
-		Initialize();
-		ApplyInversion(invertX, invertY); // Re-apply current inversion
-		Debug.Log("[ClumsyEffects] Clumsy input effect enabled.");
-	}
+		Character character;
+		CharacterMovement characterMovement;
+		FieldInfo invertXField;
+		FieldInfo invertYField;
+		float validatedMaxTime;
+		float validatedMinTime;
+		PropertyInfo valuePropX;
+		PropertyInfo valuePropY;
 
-	void Initialize()
-	{
-		if (characterMovement != null) return; // Already initialized
+		#region Unity Methods
 
-		characterMovement = GameHelpers.GetMovementComponent();
-		if (characterMovement == null)
+		void Initialize()
 		{
-			Debug.LogError("[ClumsyEffects] CharacterMovement not found.");
-			enabled = false;
-			return;
+			if (Character.localCharacter == null)
+			{
+				Debug.LogWarning("[ClumsyEffects] Character.localCharacter is null — skipping initialization.");
+				enabled = false;
+				return;
+			}
+
+			character = GameHelpers.GetCharacterComponent();
+			characterMovement = character.refs.movement;
+
+			if (characterMovement == null || character == null)
+			{
+				Debug.LogError("[ClumsyEffects] Missing required components.");
+				enabled = false;
+				return;
+			}
+
+			var movementType = characterMovement.GetType();
+			invertXField = movementType.GetField("invertXSetting", BindingFlags.Instance | BindingFlags.NonPublic);
+			invertYField = movementType.GetField("invertYSetting", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			if (invertXField == null || invertYField == null)
+			{
+				Debug.LogError("[ClumsyEffects] Invert fields not found.");
+				enabled = false;
+				return;
+			}
+
+			var invertXObj = invertXField.GetValue(characterMovement);
+			var invertYObj = invertYField.GetValue(characterMovement);
+
+			if (invertXObj == null || invertYObj == null)
+			{
+				Debug.LogError("[ClumsyEffects] Invert field values are null.");
+				enabled = false;
+				return;
+			}
+
+			valuePropX = invertXObj.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			valuePropY = invertYObj.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+			if (valuePropX == null || valuePropY == null)
+			{
+				Debug.LogError("[ClumsyEffects] Value properties not found.");
+				enabled = false;
+				return;
+			}
+
+			validatedMinTime = Mathf.Clamp(PConfig.clumsy_InvertMinTime.Value, 1f, 60f);
+			validatedMaxTime = Mathf.Clamp(PConfig.clumsy_InvertMaxTime.Value, validatedMinTime, 120f);
+
+			Debug.Log($"[ClumsyEffects] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
 		}
 
-		movementType = characterMovement.GetType();
-
-		invertXField = movementType.GetField("invertXSetting", BindingFlags.Instance | BindingFlags.NonPublic);
-		invertYField = movementType.GetField("invertYSetting", BindingFlags.Instance | BindingFlags.NonPublic);
-
-		if (invertXField == null || invertYField == null)
+		void OnDestroy()
 		{
-			Debug.LogError("[ClumsyEffects] Could not find invert fields.");
-			enabled = false;
-			return;
+			ApplyInversion(false, false);
+			StopCoroutine(ClumsyRoutine());
+			Debug.Log($"[ClumsyEffects] Reset ClumsyEffects on destroy");
 		}
 
-		var invertXObj = invertXField.GetValue(characterMovement);
-		var invertYObj = invertYField.GetValue(characterMovement);
-
-		if (invertXObj == null || invertYObj == null)
+		void Start()
 		{
-			Debug.LogError("[ClumsyEffects] Invert field objects are null.");
-			enabled = false;
-			return;
+			Initialize();
+			StartCoroutine(ClumsyRoutine());
+			Debug.Log("[ClumsyEffects] Clumsy effect coroutine started.");
 		}
 
-		valuePropX = invertXObj.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-		valuePropY = invertYObj.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+		#endregion Unity Methods
 
-		if (valuePropX == null || valuePropY == null)
+		#region Role Methods
+
+		void ApplyInversion(bool invertX, bool invertY)
 		{
-			Debug.LogError("[ClumsyEffects] Value properties not found.");
-			enabled = false;
-			return;
+			if (characterMovement == null || invertXField == null || invertYField == null || valuePropX == null || valuePropY == null)
+				return;
+
+			var invertXObj = invertXField.GetValue(characterMovement);
+			var invertYObj = invertYField.GetValue(characterMovement);
+
+			if (invertXObj == null || invertYObj == null) return;
+
+			object enumValueX = Enum.Parse(valuePropX.PropertyType, invertX ? "ON" : "OFF");
+			object enumValueY = Enum.Parse(valuePropY.PropertyType, invertY ? "ON" : "OFF");
+
+			valuePropX.SetValue(invertXObj, enumValueX);
+			valuePropY.SetValue(invertYObj, enumValueY);
+
+			Debug.Log($"[ClumsyEffects] Applied inversion - X: {enumValueX}, Y: {enumValueY}");
 		}
 
-		float configMinTime = PConfig.clumsy_InvertMinTime.Value;
-		float configMaxTime = PConfig.clumsy_InvertMaxTime.Value;
-
-		float validatedMinTime = (configMinTime >= 1f && configMinTime <= 60f) 
-			? configMinTime 
-			: 10f;
-
-		float validatedMaxTime = (configMaxTime >= validatedMinTime && configMaxTime <= 120f) 
-			? configMaxTime 
-			: 30f;
-
-		Debug.Log($"[ClumsyEffects] Initialized with invertTimer range ({validatedMinTime}, {validatedMaxTime})");
-	}
-
-	void ApplyInversion(bool invertX, bool invertY)
-	{
-		if (characterMovement == null || invertXField == null || invertYField == null || valuePropX == null || valuePropY == null)
-			return;
-
-		var invertXObj = invertXField.GetValue(characterMovement);
-		var invertYObj = invertYField.GetValue(characterMovement);
-
-		if (invertXObj == null || invertYObj == null) return;
-
-		object enumValueX = Enum.Parse(valuePropX.PropertyType, invertX ? "ON" : "OFF");
-		object enumValueY = Enum.Parse(valuePropY.PropertyType, invertY ? "ON" : "OFF");
-
-		valuePropX.SetValue(invertXObj, enumValueX);
-		valuePropY.SetValue(invertYObj, enumValueY);
-
-		Debug.Log($"[ClumsyEffects] Set invertX to {enumValueX}, invertY to {enumValueY}");
-	}
-
-	void Reset(string msg)
-	{
-		if (characterMovement == null || invertXField == null || invertYField == null || valuePropX == null || valuePropY == null)
+		IEnumerator ClumsyRoutine()
 		{
-			Debug.LogWarning("[ClumsyEffects] Skipping inversion reset — not initialized properly.");
-			return;
+			while (true)
+			{
+				float waitTime = Random.Range(validatedMinTime, validatedMaxTime);
+				yield return new WaitForSeconds(waitTime);
+
+				bool invertX = Random.value > 0.5f;
+				bool invertY = Random.value > 0.5f;
+				ApplyInversion(invertX, invertY);
+
+				//if (Random.value < 0.2f)
+				DropRandomItem();
+			}
 		}
 
-		var invertXObj = invertXField.GetValue(characterMovement);
-		var invertYObj = invertYField.GetValue(characterMovement);
-
-		if (invertXObj == null || invertYObj == null) return;
-
-		valuePropX.SetValue(invertXObj, Enum.Parse(valuePropX.PropertyType, "OFF"));
-		valuePropY.SetValue(invertYObj, Enum.Parse(valuePropY.PropertyType, "OFF"));
-
-		Debug.Log($"[ClumsyEffects] Inversion reset on {msg}.");
-	}
-
-	void OnDisable() => Reset("Disable");
-	void OnDestroy() => Reset("Destroy");
-
-	void Update()
-	{
-		invertTimer -= Time.deltaTime;
-		if (invertTimer <= 0f)
+		void DropRandomItem()
 		{
-			invertX = Random.value > 0.5f;
-			invertY = Random.value > 0.5f;
+			if (!character.refs.view.IsMine) return;
 
-			ApplyInversion(invertX, invertY);
-			invertTimer = Random.Range(validatedMinTime, validatedMaxTime);
+			var nonEmptySlots = new List<byte>();
+			ItemSlot[] array = character.player.itemSlots;
+			for (byte i = 0; i < array.Length; i++)
+			{
+				if (!array[i].IsEmpty())
+					nonEmptySlots.Add(i);
+			}
+
+			if (nonEmptySlots.Count == 0) return;
+
+			// Pick random slot
+			byte randomSlot = nonEmptySlots[Random.Range(0, nonEmptySlots.Count)];
+
+			// Get hip transform
+			Transform hip = character.refs.hip.transform;
+			Vector3 forward = hip.forward;
+
+			if (Vector3.Dot(forward, Vector3.up) < 0f)
+				forward = -forward;
+
+			Vector3 dropPos = hip.position + forward * 0.6f;
+			dropPos += Vector3.up * Random.Range(0f, 0.5f); // Slight vertical variation
+
+			if (character.refs.view.IsMine)
+			{
+				Debug.Log($"[ClumsyEffects] Attempting to drop random item at slot {randomSlot} | CurrentSelectedSlot : {character.refs.items.currentSelectedSlot.Value}.");
+				if (character.refs.items.currentSelectedSlot.IsSome && character.refs.items.currentSelectedSlot.Value == randomSlot)
+				{
+					character.refs.items.EquipSlot(Optionable<byte>.None);
+					Debug.Log($"[ClumsyEffects] Unselected slot {randomSlot} before dropping item.");
+				}
+
+				character.refs.view.RPC("DropItemFromSlotRPC", PhotonNetwork.LocalPlayer, randomSlot, dropPos);
+				Debug.Log($"[ClumsyEffects] Dropped item from slot {randomSlot} at pos {dropPos}");
+			}
 		}
-	}
 
-	float GetValidatedInvertMinTime()
-	{
-		float val = PConfig.clumsy_InvertMinTime.Value;
-		if (val < 1f) return 1f;
-		if (val > 60f) return 60f;
-		return val;
-	}
-
-	float GetValidatedInvertMaxTime(float minTime)
-	{
-		float val = PConfig.clumsy_InvertMaxTime.Value;
-		if (val < minTime) return minTime;
-		if (val > 120f) return 120f;
-		return val;
+		#endregion Role Methods
 	}
 }
-
-
