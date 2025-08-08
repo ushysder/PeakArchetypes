@@ -8,9 +8,11 @@ namespace KomiChallenge.Scripts.Roles;
 
 public class DrugsEffects : MonoBehaviour
 {
-	readonly List<EffectParam> ecstasyParams = [];
+	readonly List<EffectParam> drugsParams = [];
 
-	public void ApplyEcstasyEffects()
+	#region Unity Methods
+
+	void Initialize()
 	{
 		var volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
 		if (volumes.Length == 0)
@@ -33,8 +35,7 @@ public class DrugsEffects : MonoBehaviour
 
 				// Enable the effect if it has an 'active' property
 				var activeProp = effect.GetType().GetProperty("active", BindingFlags.Public | BindingFlags.Instance);
-				if (activeProp != null)
-					activeProp.SetValue(effect, true);
+				activeProp?.SetValue(effect, true);
 
 				var fields = effect.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 				foreach (var field in fields)
@@ -48,7 +49,7 @@ public class DrugsEffects : MonoBehaviour
 					var overrideProp = volumeParam.GetType().GetProperty("overrideState", BindingFlags.Public | BindingFlags.Instance);
 					if (valueProp == null || overrideProp == null) continue;
 
-					object newValue = GetEcstasyValue(effectName, field.Name.ToLower(), valueProp.PropertyType);
+					object newValue = GetDrugsValue(effectName, field.Name.ToLower(), valueProp.PropertyType);
 					if (newValue == null) continue;
 
 					// Cache original value before overriding
@@ -58,7 +59,7 @@ public class DrugsEffects : MonoBehaviour
 					overrideProp.SetValue(volumeParam, true);
 					valueProp.SetValue(volumeParam, newValue);
 
-					ecstasyParams.Add(new EffectParam
+					drugsParams.Add(new EffectParam
 					{
 						volumeParam = volumeParam,
 						valueProp = valueProp,
@@ -74,7 +75,37 @@ public class DrugsEffects : MonoBehaviour
 		}
 	}
 
-	object GetEcstasyValue(string effectName, string fieldName, Type fieldType)
+	void OnDestroy()
+	{
+		foreach (var param in drugsParams)
+		{
+			// Reset override and value to original
+			param.overrideProp?.SetValue(param.volumeParam, false);
+
+			if (param.originalValue != null && param.valueProp != null)
+				param.valueProp.SetValue(param.volumeParam, param.originalValue);
+			
+			// Reset the volume itself
+			if (param.volume != null)
+				param.volume.isGlobal = false;
+		}
+
+		drugsParams.Clear();
+
+		Debug.Log($"[DrugsEffects] Reset complete on destroy.");
+	}
+
+	void Start()
+	{
+		Initialize();
+		Debug.Log("[DrugsEffects] Drugs effects started.");
+	}
+
+	#endregion Unity Methods
+
+	#region Role Methods
+
+	object GetDrugsValue(string effectName, string fieldName, Type fieldType)
 	{
 		string effect = effectName.ToLower();
 		string name = fieldName.ToLower();
@@ -99,37 +130,7 @@ public class DrugsEffects : MonoBehaviour
 		return null; // fallback
 	}
 
-	void OnDestroy() => Reset("Destroy");
-
-	void OnDisable() => Reset("Disable");
-
-	void OnEnable()
-	{
-		ApplyEcstasyEffects();
-		Debug.Log("[DrugsEffects] Ecstasy effects applied on enable.");
-	}
-
-	void Reset(string msg)
-	{
-		foreach (var param in ecstasyParams)
-		{
-			// Reset override and value to original
-			param.overrideProp?.SetValue(param.volumeParam, false);
-
-			if (param.originalValue != null && param.valueProp != null)
-			{
-				param.valueProp.SetValue(param.volumeParam, param.originalValue);
-			}
-
-			// Reset the volume itself
-			if (param.volume != null)
-				param.volume.isGlobal = false;
-		}
-
-		ecstasyParams.Clear();
-
-		Debug.Log($"[DrugsEffects] Reset complete on {msg}.");
-	}
+	#endregion Role Methods
 
 	class EffectParam
 	{
