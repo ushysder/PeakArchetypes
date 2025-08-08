@@ -13,6 +13,7 @@ At the start of each run, every player choose one of the following debuffs:
 - **Clumsy** – Occasionally loses control as movement inputs are suddenly inverted.
 - **Junky** – Sees the world differently and can die of overdose.
 - **Narcoleptic** – Gradually drifts off and collapses into sleep.
+- **One-Eyed** – Only sees half of the world.
 
 Survive with these conditions... if you can.
 

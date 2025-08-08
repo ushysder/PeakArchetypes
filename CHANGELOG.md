@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.4.0
+
+Added new role : One-Eyed
+
 # 0.3.2
 
 Drugged now can overdose and die if they stack too much poison

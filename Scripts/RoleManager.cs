@@ -19,7 +19,8 @@ public class RoleManager
 		drugs,
 		clumsy,
 		nothing,
-		narcoleptic
+		narcoleptic,
+		oneEyed
 	}
 
 	public static void AppendRoles()
@@ -67,6 +68,11 @@ public class RoleManager
 		"Narcoleptique",
 		"Si tu trouves quelqu’un qui ronfle, c’est sûrement toi !",
 		RoleType.narcoleptic));
+
+		defaultTypes.Add(new Role(
+		"Borgne",
+		"Tu vois pas très bien, mais tu vois quand même.",
+		RoleType.oneEyed));
 	}
 
 	public static void ApplyDebuffs()

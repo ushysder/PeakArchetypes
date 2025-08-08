@@ -16,7 +16,8 @@ public class Role : MonoBehaviour
 		{ RoleType.clumsy, typeof(ClumsyEffects) },
 		{ RoleType.drunk, typeof(DrunkController) },
 		{ RoleType.drugs, typeof(DrugsEffects) },
-		{ RoleType.narcoleptic, typeof(NarcolepticEffect) }
+		{ RoleType.narcoleptic, typeof(NarcolepticEffect) },
+		{ RoleType.oneEyed, typeof(OneEyedEffects) }
 		// RoleType.nothing is intentionally excluded
 	};
 

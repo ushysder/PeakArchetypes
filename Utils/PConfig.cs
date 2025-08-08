@@ -34,6 +34,12 @@ public class PConfig
 
 	#endregion NarcolepticSettings
 
+	#region OneEyedSettings
+
+	public static ConfigEntry<float> oneEyed_targetInjuryPercent;
+
+	#endregion OneEyedSettings
+
 	public static void AllConfigs(ConfigFile cfg)
 	{
 		clumsy_InvertMinTime = cfg.Bind(
@@ -75,5 +81,9 @@ public class PConfig
 		narco_passOutDuration = cfg.Bind(
 			"NarcolepticSettings", "PassOutDuration", 5f,
 			"Duration the player stays passed out after max Drowsy is reached. [Min: 1, Max: 30]");
+
+		oneEyed_targetInjuryPercent = cfg.Bind(
+			"OneEyedSettings", "TargetInjuryPercent", 50f,
+			"Percentage of injury to maintain for one-eyed effect. [Min: 10, Max: 90]");
 	}
 }
