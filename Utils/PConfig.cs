@@ -55,7 +55,7 @@ public class PConfig
 			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
 
 		clumsy_ItemDropChancePercent = cfg.Bind(
-			"ClumsySettings", "ItemDropChancePercent", 20,
+			"ClumsySettings", "ItemDropChancePercent", 50,
 			"Chance (in percent) to drop a random item when inversion changes. [0 = never, 100 = always]");
 
 		narco_timeToFullDrowsy = cfg.Bind(

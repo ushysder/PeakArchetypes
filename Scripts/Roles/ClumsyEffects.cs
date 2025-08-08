@@ -84,7 +84,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			validatedDropChance = (PConfig.clumsy_ItemDropChancePercent.Value >= 0 && PConfig.clumsy_ItemDropChancePercent.Value <= 100)
 				? PConfig.clumsy_ItemDropChancePercent.Value
-				: 20;
+				: 50;
 
 			Debug.Log($"[ClumsyEffects] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
 		}
