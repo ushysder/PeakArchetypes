@@ -17,6 +17,7 @@ public class PConfig
 
 	public static ConfigEntry<float> clumsy_InvertMinTime;
 	public static ConfigEntry<float> clumsy_InvertMaxTime;
+	public static ConfigEntry<int> clumsy_ItemDropChancePercent;
 
 	#endregion ClumsySettings
 
@@ -52,6 +53,10 @@ public class PConfig
 		clumsy_InvertMaxTime = cfg.Bind(
 			"ClumsySettings", "InvertMaxTime", 30f,
 			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
+
+		clumsy_ItemDropChancePercent = cfg.Bind(
+			"ClumsySettings", "ItemDropChancePercent", 20,
+			"Chance (in percent) to drop a random item when inversion changes. [0 = never, 100 = always]");
 
 		narco_timeToFullDrowsy = cfg.Bind(
 			"NarcolepticSettings", "TimeToFullDrowsy", 300f,

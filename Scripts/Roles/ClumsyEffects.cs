@@ -17,6 +17,7 @@ namespace KomiChallenge.Scripts.Roles
 		FieldInfo invertXField;
 		FieldInfo invertYField;
 		float validatedMaxTime;
+		int validatedDropChance;
 		float validatedMinTime;
 		PropertyInfo valuePropX;
 		PropertyInfo valuePropY;
@@ -73,8 +74,17 @@ namespace KomiChallenge.Scripts.Roles
 				return;
 			}
 
-			validatedMinTime = Mathf.Clamp(PConfig.clumsy_InvertMinTime.Value, 1f, 60f);
-			validatedMaxTime = Mathf.Clamp(PConfig.clumsy_InvertMaxTime.Value, validatedMinTime, 120f);
+			validatedMinTime = (PConfig.clumsy_InvertMinTime.Value >= 1f && PConfig.clumsy_InvertMinTime.Value <= 60f)
+				? PConfig.clumsy_InvertMinTime.Value
+				: 10f;
+
+			validatedMaxTime = (PConfig.clumsy_InvertMaxTime.Value >= validatedMinTime && PConfig.clumsy_InvertMaxTime.Value <= 120f)
+				? PConfig.clumsy_InvertMaxTime.Value
+				: Mathf.Max(validatedMinTime, 30f);
+
+			validatedDropChance = (PConfig.clumsy_ItemDropChancePercent.Value >= 0 && PConfig.clumsy_ItemDropChancePercent.Value <= 100)
+				? PConfig.clumsy_ItemDropChancePercent.Value
+				: 20;
 
 			Debug.Log($"[ClumsyEffects] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
 		}
@@ -127,8 +137,8 @@ namespace KomiChallenge.Scripts.Roles
 				bool invertY = Random.value > 0.5f;
 				ApplyInversion(invertX, invertY);
 
-				//if (Random.value < 0.2f)
-				DropRandomItem();
+				if (Random.Range(0, 100) < validatedDropChance)
+					DropRandomItem();
 			}
 		}
 
