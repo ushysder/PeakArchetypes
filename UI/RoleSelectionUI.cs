@@ -14,6 +14,44 @@ public class RoleSelectionUI : MonoBehaviour
 
 	List<Role> RoleList => RoleManager.defaultTypes;
 
+	#region Unity Methods 
+
+	void Start() => CreateUI();
+
+	void OnDestroy()
+	{
+		if (panel != null)
+			Destroy(panel);
+
+		if(gameObject != null)
+			Destroy(gameObject);
+	}
+
+	void Update()
+	{
+		// Role selection: support top-row & numpad keys
+		for (int i = 0; i < RoleList.Count; i++)
+		{
+			KeyCode alphaKey = KeyCode.Alpha0 + i;
+			KeyCode keypadKey = KeyCode.Keypad0 + i;
+
+			if (Input.GetKeyDown(alphaKey) || Input.GetKeyDown(keypadKey))
+			{
+				selectedIndex = i;
+				UpdateDisplayText();
+				Debug.Log($">>> Selected index {i}: {RoleList[i].RoleName}");
+				break;
+			}
+		}
+
+		if (selectedIndex != -1 && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+			OnConfirm();
+	}
+
+	#endregion Unity Methods
+
+	#region UI Methods
+
 	void CreateUI()
 	{
 		GameObject canvas = GameObject.Find("GAME/GUIManager/Canvas_HUD");
@@ -62,40 +100,10 @@ public class RoleSelectionUI : MonoBehaviour
 		else
 			RoleManager.players.Add(localId, selected);
 
-
-		Debug.Log($">>> Sent role selection: {selected.RoleName}");
+		Debug.Log($">>> Selected role: {selected.RoleName}");
 
 		Destroy(panel);
 		Destroy(gameObject);
-	}
-
-	void Start() => CreateUI();
-
-	void OnDestroy()
-	{
-		if (panel != null)
-			Destroy(panel);
-	}
-
-	void Update()
-	{
-		// Role selection: support top-row & numpad keys
-		for (int i = 0; i < 8; i++)
-		{
-			KeyCode alphaKey = KeyCode.Alpha1 + i;
-			KeyCode keypadKey = KeyCode.Keypad1 + i;
-
-			if (Input.GetKeyDown(alphaKey) || Input.GetKeyDown(keypadKey))
-			{
-				selectedIndex = i;
-				UpdateDisplayText();
-				Debug.Log($">>> Selected index {i}: {RoleList[i].RoleName}");
-				break;
-			}
-		}
-
-		if (selectedIndex != -1 && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
-			OnConfirm();
 	}
 
 	void UpdateDisplayText()
@@ -105,10 +113,12 @@ public class RoleSelectionUI : MonoBehaviour
 		for (int i = 0; i < RoleList.Count; i++)
 		{
 			string prefix = (i == selectedIndex) ? "➡ " : "   ";
-			text += $"{prefix}<b>{i + 1}</b>. {RoleList[i].RoleName} - {RoleList[i].Desc}\n";
+			text += $"{prefix}<b>{i}</b>. {RoleList[i].RoleName} - {RoleList[i].Desc}\n";
 		}
 
-		text += "\nAppuyez sur un chiffre (1-8) pour choisir, puis Entrée pour confirmer.";
+		text += $"\nAppuyez sur un chiffre (0-{RoleList.Count-1}) pour choisir, puis Entrée pour confirmer.";
 		displayText.text = text;
 	}
+
+	#endregion
 }
