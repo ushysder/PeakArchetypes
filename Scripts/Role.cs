@@ -14,7 +14,7 @@ public class Role : MonoBehaviour
 		{ RoleType.deaf, typeof(DeafEffect) },
 		{ RoleType.mute, typeof(MuteEffect) },
 		{ RoleType.clumsy, typeof(ClumsyEffects) },
-		{ RoleType.drunk, typeof(DrunkController) },
+		{ RoleType.drunk, typeof(DrunkEffects) },
 		{ RoleType.drugs, typeof(DrugsEffects) },
 		{ RoleType.narcoleptic, typeof(NarcolepticEffect) },
 		{ RoleType.oneEyed, typeof(OneEyedEffects) }

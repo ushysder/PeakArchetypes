@@ -48,9 +48,9 @@ public class DrugsEffects : MonoBehaviour
 
 		float configTimeToFull = PConfig.drugs_timeToFullPoison.Value;
 
-		configTimeToFull = (configTimeToFull >= 600f && configTimeToFull <= 1800f)
+		configTimeToFull = (configTimeToFull >= Const.drugs_timeToFullPoison_Min && configTimeToFull <= Const.drugs_timeToFullPoison_Max)
 			? configTimeToFull
-			: 900f;
+			: Const.drugs_timeToFullPoison;
 
 		poisonIncreasePerSecond = maxPoison / configTimeToFull;
 
@@ -155,19 +155,6 @@ public class DrugsEffects : MonoBehaviour
 	#endregion Unity Methods
 
 	#region Role Methods
-
-	object GetDrugsValue(Type fieldType)
-	{
-		if (fieldType == typeof(bool))
-			return true;
-		else if (fieldType.IsEnum)
-		{
-			var values = Enum.GetValues(fieldType);
-			return values.GetValue(values.Length - 1); // Most intense
-		}
-
-		return null;
-	}
 
 	IEnumerator DrugsRoutine()
 	{

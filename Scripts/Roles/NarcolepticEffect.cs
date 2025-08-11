@@ -1,5 +1,5 @@
-﻿using KomiChallenge.Utils;
-using Photon.Pun;
+﻿using KomiChallenge.Shared;
+using KomiChallenge.Utils;
 using System.Collections;
 using UnityEngine;
 using static CharacterAfflictions;
@@ -42,17 +42,17 @@ public class NarcolepticEffect : MonoBehaviour
 		float configPassOutDuration = PConfig.narco_passOutDuration.Value;
 		float configTimeToFull = PConfig.narco_timeToFullDrowsy.Value;
 
-		configTimeToFull = (configTimeToFull >= 30f && configTimeToFull <= 600f)
+		configTimeToFull = (configTimeToFull >= Const.narco_timeToFullDrowsy_Min && configTimeToFull <= Const.narco_timeToFullDrowsy_Max)
 			? configTimeToFull
-			: 300f;
+			: Const.narco_timeToFullDrowsy;
 
 		drowsyIncreasePerSecond = maxDrowsy / configTimeToFull;
 
 		Debug.Log($"[NarcolepticEffect] drowsyIncreasePerSecond set to {drowsyIncreasePerSecond} (time to full: {configTimeToFull}s)");
 
-		passOutDuration = (configPassOutDuration >= 1f && configPassOutDuration <= 30f)
+		passOutDuration = (configPassOutDuration >= Const.narco_passOutDuration_Min && configPassOutDuration <= Const.narco_passOutDuration_Max)
 			? configPassOutDuration
-			: 5f;
+			: Const.narco_passOutDuration;
 
 		Debug.Log($"[NarcolepticEffect] passOutDuration set to {passOutDuration}s");
 
@@ -115,10 +115,6 @@ public class NarcolepticEffect : MonoBehaviour
 			{
 				Debug.Log("[NarcolepticEffect] Player waking up from narcolepsy.");
 				afflictions.SetStatus(STATUSTYPE.Drowsy, 0f);
-
-				if (view != null && view.IsMine)
-					view.RPC("RPCA_UnPassOut", PhotonNetwork.LocalPlayer);
-
 				yield return new WaitForSeconds(1f);
 			}
 			else

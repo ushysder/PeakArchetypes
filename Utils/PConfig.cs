@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using KomiChallenge.Shared;
 
 namespace KomiChallenge.Utils;
 
@@ -43,47 +44,47 @@ public class PConfig
 	public static void AllConfigs(ConfigFile cfg)
 	{
 		clumsy_InvertMinTime = cfg.Bind(
-			"ClumsySettings", "InvertMinTime", 10f,
-			"Minimum time before inversion changes (seconds). [Min: 1, Max: 60]");
+			"ClumsySettings", "InvertMinTime", Const.clumsy_InvertMinTime,
+			$"Minimum time before inversion changes (seconds). [Min: {Const.clumsy_InvertMinTime_Min}, Max: {Const.clumsy_InvertMinTime_Max}]");
 
 		clumsy_InvertMaxTime = cfg.Bind(
-			"ClumsySettings", "InvertMaxTime", 30f,
-			"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: 120]");
+			"ClumsySettings", "InvertMaxTime", Const.clumsy_InvertMaxTime,
+			$"Maximum time before inversion changes (seconds). Must be >= InvertMinTime. [Min: InvertMinTime, Max: {Const.clumsy_InvertMaxTime_Max}]");
 
 		clumsy_ItemDropChancePercent = cfg.Bind(
-			"ClumsySettings", "ItemDropChancePercent", 50,
+			"ClumsySettings", "ItemDropChancePercent", Const.clumsy_ItemDropChancePercent,
 			"Chance (in percent) to drop a random item when inversion changes. [0 = never, 100 = always]");
 
 		drunk_maxFallInterval = cfg.Bind(
-			"DrunkSettings", "MaxFallInterval", 45f,
-			"Max interval between falls at lowest drunkenness (in seconds). [Min: 1, Max: 600]");
+			"DrunkSettings", "MaxFallInterval", Const.drunk_maxFallInterval,
+			$"Max interval between falls (in seconds). [Min: {Const.drunk_maxFallInterval_Min}, Max: {Const.drunk_maxFallInterval_Max}]");
 
 		drunk_minFallInterval = cfg.Bind(
-			"DrunkSettings", "MinFallInterval", 10f,
-			"Min interval between falls at peak drunkenness (in seconds). [Min: 1, Max: MaxFallInterval]");
+			"DrunkSettings", "MinFallInterval", Const.drunk_minFallInterval,
+			$"Min interval between falls (in seconds). [Min: {Const.drunk_minFallInterval_Min}, Max: MaxFallInterval]");
 
 		drunk_passOutDuration = cfg.Bind(
-			"DrunkSettings", "PassOutDuration", 5f,
-			"Duration the player stays passed out (in seconds). [Min: 1, Max: 30]");
+			"DrunkSettings", "PassOutDuration", Const.drunk_passOutDuration,
+			$"Duration the player stays passed out (in seconds). [Min: {Const.drunk_passOutDuration_Min}, Max: {Const.drunk_passOutDuration_Max}]");
 
 		drunk_timeToMaxDrunkness = cfg.Bind(
-			"DrunkSettings", "TimeToMaxDrunkness", 300f,
-			"Time to reach full drunkenness (in seconds). [Min: 30, Max: 600]");
+			"DrunkSettings", "TimeToMaxDrunkness", Const.drunk_timeToMaxDrunkness,
+			$"Time to reach full drunkenness (in seconds). [Min: {Const.drunk_timeToMaxDrunkness_Min}, Max: {Const.drunk_timeToMaxDrunkness_Max}]");
 
 		drugs_timeToFullPoison = cfg.Bind(
-			"DrugsSettings", "TimeToFullPoison", 900f,
-			"Seconds it takes for Poison status to reach full overdose (poison = 1). [Min: 600, Max: 1800]");
+			"DrugsSettings", "TimeToFullPoison", Const.drugs_timeToFullPoison,
+			$"Seconds it takes for Poison status to reach full overdose. [Min: {Const.drugs_timeToFullPoison_Min}, Max: {Const.drugs_timeToFullPoison_Max}]");
 
 		narco_timeToFullDrowsy = cfg.Bind(
-			"NarcolepticSettings", "TimeToFullDrowsy", 300f,
-			"Seconds it takes for Drowsy status to reach full and cause pass out. [Min: 30, Max: 600]");
+			"NarcolepticSettings", "TimeToFullDrowsy", Const.narco_timeToFullDrowsy,
+			$"Seconds it takes for Drowsy status to reach full and cause pass out. [Min: {Const.narco_timeToFullDrowsy_Min}, Max: {Const.narco_timeToFullDrowsy_Max}]");
 
 		narco_passOutDuration = cfg.Bind(
-			"NarcolepticSettings", "PassOutDuration", 5f,
-			"Duration the player stays passed out after max Drowsy is reached. [Min: 1, Max: 30]");
+			"NarcolepticSettings", "PassOutDuration", Const.narco_passOutDuration,
+			$"Duration the player stays passed out after max Drowsy is reached. [Min: {Const.narco_passOutDuration_Min}, Max: {Const.narco_passOutDuration_Max}]");
 
 		oneEyed_targetInjuryPercent = cfg.Bind(
-			"OneEyedSettings", "TargetInjuryPercent", 50f,
-			"Percentage of injury to maintain for one-eyed effect. [Min: 10, Max: 90]");
+			"OneEyedSettings", "TargetInjuryPercent", Const.oneEyed_targetInjuryPercent,
+			$"Percentage of injury to maintain for one-eyed effect. [Min: {Const.oneEyed_targetInjuryPercent_Min}, Max: {Const.oneEyed_targetInjuryPercent_Max}]");
 	}
 }

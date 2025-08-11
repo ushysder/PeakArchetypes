@@ -5,10 +5,11 @@ using System.Collections;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
 using Photon.Pun;
+using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class DrunkController : MonoBehaviour
+public class DrunkEffects : MonoBehaviour
 {
 	readonly List<VignetteParam> vignetteParams = [];
 
@@ -35,21 +36,21 @@ public class DrunkController : MonoBehaviour
 		float configPassOut = Utils.PConfig.drunk_passOutDuration.Value;
 		float configTimeToMax = Utils.PConfig.drunk_timeToMaxDrunkness.Value;
 
-		maxFallInterval = (configMaxFall >= 1 && configMaxFall <= 600)
+		maxFallInterval = (configMaxFall >= Const.drunk_maxFallInterval_Min && configMaxFall <= Const.drunk_maxFallInterval_Max)
 			? configMaxFall
-			: 45f;
+			: Const.drunk_maxFallInterval;
 
-		minFallInterval = (configMinFall >= 1 && configMinFall <= maxFallInterval)
+		minFallInterval = (configMinFall >= Const.drunk_minFallInterval_Min && configMinFall <= maxFallInterval)
 			? configMinFall
-			: 10f;
+			: Const.drunk_minFallInterval;
 
-		passOutDuration = (configPassOut >= 1f && configPassOut <= 30f)
+		passOutDuration = (configPassOut >= Const.drunk_passOutDuration_Min && configPassOut <= Const.drunk_passOutDuration_Max)
 			? configPassOut
-			: 5f;
+			: Const.narco_passOutDuration;
 
-		timeToMaxDrunkness = (configTimeToMax >= 30f && configTimeToMax <= 600f)
+		timeToMaxDrunkness = (configTimeToMax >= Const.drunk_timeToMaxDrunkness_Min && configTimeToMax <= Const.drunk_timeToMaxDrunkness_Max)
 			? configTimeToMax
-			: 300f;
+			: Const.drunk_timeToMaxDrunkness;
 
 		Debug.Log($"[DrunkController] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
 

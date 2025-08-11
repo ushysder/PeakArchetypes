@@ -7,6 +7,7 @@ using KomiChallenge.Utils;
 using Photon.Pun;
 using System.Collections.Generic;
 using Zorro.Core;
+using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles
 {
@@ -74,17 +75,17 @@ namespace KomiChallenge.Scripts.Roles
 				return;
 			}
 
-			validatedMinTime = (PConfig.clumsy_InvertMinTime.Value >= 1f && PConfig.clumsy_InvertMinTime.Value <= 60f)
+			validatedMinTime = (PConfig.clumsy_InvertMinTime.Value >= Const.clumsy_InvertMinTime_Min && PConfig.clumsy_InvertMinTime.Value <= Const.clumsy_InvertMinTime_Max)
 				? PConfig.clumsy_InvertMinTime.Value
-				: 10f;
+				: Const.clumsy_InvertMinTime;
 
-			validatedMaxTime = (PConfig.clumsy_InvertMaxTime.Value >= validatedMinTime && PConfig.clumsy_InvertMaxTime.Value <= 120f)
+			validatedMaxTime = (PConfig.clumsy_InvertMaxTime.Value >= validatedMinTime && PConfig.clumsy_InvertMaxTime.Value <= Const.clumsy_InvertMaxTime_Max)
 				? PConfig.clumsy_InvertMaxTime.Value
-				: Mathf.Max(validatedMinTime, 30f);
+				: Mathf.Max(validatedMinTime, Const.clumsy_InvertMaxTime);
 
-			validatedDropChance = (PConfig.clumsy_ItemDropChancePercent.Value >= 0 && PConfig.clumsy_ItemDropChancePercent.Value <= 100)
+			validatedDropChance = (PConfig.clumsy_ItemDropChancePercent.Value >= Const.clumsy_ItemDropChancePercent_Min && PConfig.clumsy_ItemDropChancePercent.Value <= Const.clumsy_ItemDropChancePercent_Max)
 				? PConfig.clumsy_ItemDropChancePercent.Value
-				: 50;
+				: Const.clumsy_ItemDropChancePercent;
 
 			Debug.Log($"[ClumsyEffects] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
 		}
