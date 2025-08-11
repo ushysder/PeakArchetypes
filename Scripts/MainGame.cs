@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using KomiChallenge.Shared;
 using Photon.Pun;
 using UnityEngine;
 
@@ -9,6 +10,29 @@ internal class MainGame
 {
 	public static bool enteredAwake = false;
 
+	[HarmonyPatch(typeof(Player), "Awake")]
+	[HarmonyPostfix]
+	static void Postfix(Player __instance)
+	{
+		var character = __instance.character;
+		if (character == null)
+		{
+			Debug.LogWarning($"[Patch] Player {__instance.photonView.Owner.NickName} has no Character yet.");
+			return;
+		}
+
+		var roleRPC = character.gameObject.GetComponent<RoleRPC>();
+		if (roleRPC == null)
+		{
+			Debug.Log($"[Patch] Adding RoleRPC to {character.name} owned by {__instance.photonView.Owner.NickName}");
+			character.gameObject.AddComponent<RoleRPC>();
+		}
+		else
+		{
+			Debug.Log($"[Patch] RoleRPC already present on {character.name}");
+		}
+	}
+	
 	/// <summary>
 	/// When the map area gets displayed, replace the text with the
 	/// Debuff the player has

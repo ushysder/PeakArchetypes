@@ -20,7 +20,8 @@ public class RoleManager
 		clumsy,
 		nothing,
 		narcoleptic,
-		oneEyed
+		oneEyed,
+		medic
 	}
 
 	public static void AppendRoles()
@@ -73,6 +74,11 @@ public class RoleManager
 		"Borgne",
 		"Tu vois pas très bien, mais tu vois quand même.",
 		RoleType.oneEyed));
+
+		defaultTypes.Add(new Role(
+		"Médecin",
+		"Tu as des compétences médicales, mais tu n'es pas un super-héros.",
+		RoleType.medic));
 	}
 
 	public static void ApplyDebuffs()

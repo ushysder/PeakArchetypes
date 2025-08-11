@@ -161,14 +161,9 @@ namespace KomiChallenge.Scripts.Roles
 			byte randomSlot = nonEmptySlots[Random.Range(0, nonEmptySlots.Count)];
 
 			// Get hip transform
-			Transform hip = character.refs.hip.transform;
-			Vector3 forward = hip.forward;
+			Transform hip = character.refs.hip.transform;		
 
-			if (Vector3.Dot(forward, Vector3.up) < 0f)
-				forward = -forward;
-
-			Vector3 dropPos = hip.position + forward * 0.6f;
-			dropPos += Vector3.up * Random.Range(0f, 0.5f); // Slight vertical variation
+			Vector3 spawnPos = hip.position + Vector3.up * 1.5f;
 
 			if (character.refs.view.IsMine)
 			{
@@ -179,8 +174,63 @@ namespace KomiChallenge.Scripts.Roles
 					Debug.Log($"[ClumsyEffects] Unselected slot {randomSlot} before dropping item.");
 				}
 
-				character.refs.view.RPC("DropItemFromSlotRPC", PhotonNetwork.LocalPlayer, randomSlot, dropPos);
-				Debug.Log($"[ClumsyEffects] Dropped item from slot {randomSlot} at pos {dropPos}");
+				character.refs.view.RPC("ClumsyDropItemRPC", RpcTarget.All, randomSlot, spawnPos);
+				Debug.Log($"[ClumsyEffects] Dropped item from slot {randomSlot} at pos {spawnPos}");
+			}
+		}
+
+		[PunRPC]
+		void ClumsyDropItemRPC(byte slotID, Vector3 spawnPosition)
+		{
+			Debug.Log($"[ClumsyDropItemRPC] Called on client {PhotonNetwork.LocalPlayer.NickName}. IsMasterClient={PhotonNetwork.IsMasterClient}");
+
+			var itemSlot = character.player.GetItemSlot(slotID);
+			if (!itemSlot.IsEmpty())
+			{
+				string prefabPath = "0_Items/" + itemSlot.GetPrefabName();
+				Debug.Log($"[ClumsyDropItemRPC] Attempting to instantiate prefab '{prefabPath}' at {spawnPosition}");
+
+				var instantiatedObj = PhotonNetwork.Instantiate(prefabPath, spawnPosition, Quaternion.identity, 0);
+				if (instantiatedObj == null)
+				{
+					Debug.LogError($"[ClumsyDropItemRPC] Failed to instantiate prefab '{prefabPath}'");
+					return;
+				}
+
+				PhotonView component = instantiatedObj.GetComponent<PhotonView>();
+				if (component == null)
+				{
+					Debug.LogError($"[ClumsyDropItemRPC] Instantiated object missing PhotonView component");
+					return;
+				}
+
+				Debug.Log($"[ClumsyDropItemRPC] Successfully instantiated '{component.gameObject.name}'");
+
+				component.RPC("SetItemInstanceDataRPC", RpcTarget.All, itemSlot.data);
+				component.RPC("SetKinematicRPC", RpcTarget.All, false, component.transform.position, component.transform.rotation);
+			}
+			else
+			{
+				Debug.LogWarning($"[ClumsyDropItemRPC] Item slot {slotID} is empty, no item to instantiate");
+			}
+			
+			// Only empty the slot if this client owns the character
+			if (character.refs.view.IsMine)
+			{
+				Debug.Log($"[ClumsyDropItemRPC] Emptying slot {slotID} on client {PhotonNetwork.LocalPlayer.NickName}");
+				character.player.EmptySlot(Optionable<byte>.Some(slotID));
+
+				var afflictions = character.refs.afflictions;
+				var method = afflictions.GetType().GetMethod("UpdateWeight", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				if (method != null)
+				{
+					method.Invoke(afflictions, null);
+					Debug.Log("[ClumsyDropItemRPC] Called UpdateWeight successfully");
+				}
+				else
+				{
+					Debug.LogWarning("[ClumsyDropItemRPC] Could not find UpdateWeight method");
+				}
 			}
 		}
 

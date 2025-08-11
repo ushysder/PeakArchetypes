@@ -69,6 +69,9 @@
 		<Reference Include="UnityEngine.TextRenderingModule">
 			<HintPath>D:\Games\SteamLibrary\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
+			<HintPath>D:\Games\SteamLibrary\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+		</Reference>
 		<Reference Include="Zorro.Core.Runtime">
 			<HintPath>D:\Games\SteamLibrary\steamapps\common\PEAK\PEAK_Data\Managed\Zorro.Core.Runtime.dll</HintPath>
 		</Reference>

@@ -12,7 +12,7 @@ public class Plugin : BaseUnityPlugin
 {
 	public const string modGUID = "KomiChallenge.ushysder";
 	public const string modName = "KomiChallenge";
-	public const string modVersion = "0.4.0";
+	public const string modVersion = "0.5.0";
 	internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 	public static int localID;
 	Harmony _harmony;

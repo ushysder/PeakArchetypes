@@ -17,7 +17,8 @@ public class Role : MonoBehaviour
 		{ RoleType.drunk, typeof(DrunkEffects) },
 		{ RoleType.drugs, typeof(DrugsEffects) },
 		{ RoleType.narcoleptic, typeof(NarcolepticEffect) },
-		{ RoleType.oneEyed, typeof(OneEyedEffects) }
+		{ RoleType.oneEyed, typeof(OneEyedEffects) },
+		{ RoleType.medic, typeof(MedicEffects) }
 		// RoleType.nothing is intentionally excluded
 	};
 
@@ -58,7 +59,7 @@ public class Role : MonoBehaviour
 		if (add)
 		{
 			if (existing == null)
-				characterGO.AddComponent(componentType);
+				characterGO.AddComponent(componentType);	
 		}
 		else
 		{

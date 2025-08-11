@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using KomiChallenge.Shared;
+using UnityEngine;
 
 namespace KomiChallenge.Utils;
 
@@ -40,6 +41,16 @@ public class PConfig
 	public static ConfigEntry<float> oneEyed_targetInjuryPercent;
 
 	#endregion OneEyedSettings
+
+	#region MedicSettings
+
+	public static ConfigEntry<float> medic_HealCooldownTime;
+	public static ConfigEntry<float> medic_HealRadius;
+	public static ConfigEntry<float> medic_HealAmountPercent;
+	public static ConfigEntry<float> medic_HoldDuration;
+	public static ConfigEntry<KeyCode> medic_HealKey;
+
+	#endregion MedicSettings
 
 	public static void AllConfigs(ConfigFile cfg)
 	{
@@ -86,5 +97,25 @@ public class PConfig
 		oneEyed_targetInjuryPercent = cfg.Bind(
 			"OneEyedSettings", "TargetInjuryPercent", Const.oneEyed_targetInjuryPercent,
 			$"Percentage of injury to maintain for one-eyed effect. [Min: {Const.oneEyed_targetInjuryPercent_Min}, Max: {Const.oneEyed_targetInjuryPercent_Max}]");
+
+		medic_HealCooldownTime = cfg.Bind(
+			"MedicSettings", "HealCooldownTime", Const.medic_HealCooldownTime,
+			$"Cooldown time between be able to heals in seconds. [Min: {Const.medic_HealCooldownTime_Min}, Max: {Const.medic_HealCooldownTime_Max}]");
+
+		medic_HealRadius = cfg.Bind(
+			"MedicSettings", "HealRadius", Const.medic_HealRadius,
+			$"Radius within which players can be healed. [Min: {Const.medic_HealRadius_Min}, Max: {Const.medic_HealRadius_Max}]");
+
+		medic_HealAmountPercent = cfg.Bind(
+			"MedicSettings", "HealAmountPercent", Const.medic_HealAmountPercent * 100f,
+			$"Percentage of health restored per heal. Example: 30 = 30%. [Min: {Const.medic_HealAmount_Min * 100}%, Max: {Const.medic_HealAmount_Max * 100}%]");
+
+		medic_HoldDuration = cfg.Bind(
+			"MedicSettings", "HoldDuration", Const.medic_HoldDuration,
+			$"Time in seconds the heal button must be held to complete healing. [Min: {Const.medic_HoldDuration_Min}, Max: {Const.medic_HoldDuration_Max}]");
+
+		medic_HealKey = cfg.Bind(
+			"MedicSettings", "HealKey", Const.medic_HealKey,
+			"Key used to trigger healing skill.");
 	}
 }

@@ -61,6 +61,11 @@ public class RoleSelectionUI : MonoBehaviour
 			return;
 		}
 
+		int roleCount = RoleList.Count;
+		int lineHeight = 25; // Approx. one text line
+		int padding = 20;
+		int panelHeight = Mathf.Max(400, roleCount * lineHeight + padding);
+
 		// Panel
 		panel = new GameObject("RoleSelectionPanel");
 		panel.transform.SetParent(canvas.transform, false);
@@ -69,11 +74,11 @@ public class RoleSelectionUI : MonoBehaviour
 		bg.color = new Color(0, 0, 0, 0.8f);
 
 		RectTransform panelRect = panel.GetComponent<RectTransform>();
-		panelRect.sizeDelta = new Vector2(600, 300);
+		panelRect.sizeDelta = new Vector2(600, panelHeight);
 		panelRect.anchoredPosition = new Vector2(0, 0);
 
 		// Text
-		GameObject textObj = new GameObject("RoleText");
+		GameObject textObj = new("RoleText");
 		textObj.transform.SetParent(panel.transform, false);
 		displayText = textObj.AddComponent<Text>();
 		displayText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
@@ -82,7 +87,7 @@ public class RoleSelectionUI : MonoBehaviour
 		displayText.color = Color.white;
 
 		RectTransform textRect = displayText.GetComponent<RectTransform>();
-		textRect.sizeDelta = new Vector2(580, 280);
+		textRect.sizeDelta = new Vector2(580, panelHeight - padding);
 		textRect.anchoredPosition = new Vector2(0, 0);
 
 		UpdateDisplayText();
