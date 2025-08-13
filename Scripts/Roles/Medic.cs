@@ -7,7 +7,7 @@ using KomiChallenge.Utils;
 
 namespace KomiChallenge.Scripts.Roles
 {
-	public class MedicEffects : MonoBehaviour
+	public class Medic : MonoBehaviour
 	{
 		float HealCooldownTime;
 		float HealRadius;

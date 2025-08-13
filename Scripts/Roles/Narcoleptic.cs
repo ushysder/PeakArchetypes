@@ -6,7 +6,7 @@ using static CharacterAfflictions;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class NarcolepticEffect : MonoBehaviour
+public class Narcoleptic : MonoBehaviour
 {
 	readonly float maxDrowsy = 1f;
 	CharacterAfflictions afflictions;

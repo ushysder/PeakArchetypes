@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class BlindEffect : MonoBehaviour
+public class Blind : MonoBehaviour
 {
 	GameObject blackScreen;
 

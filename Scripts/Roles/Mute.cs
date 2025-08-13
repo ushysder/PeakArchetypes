@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class MuteEffect : MonoBehaviour
+public class Mute : MonoBehaviour
 {
 	Recorder recorder;
 

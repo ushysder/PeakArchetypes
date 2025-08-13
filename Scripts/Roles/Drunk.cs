@@ -9,7 +9,7 @@ using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class DrunkEffects : MonoBehaviour
+public class Drunk : MonoBehaviour
 {
 	readonly List<VignetteParam> vignetteParams = [];
 

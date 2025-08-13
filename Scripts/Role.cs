@@ -10,15 +10,15 @@ public class Role : MonoBehaviour
 {
 	static readonly Dictionary<RoleType, Type> roleComponentMap = new()
 	{
-		{ RoleType.blind, typeof(BlindEffect) },
-		{ RoleType.deaf, typeof(DeafEffect) },
-		{ RoleType.mute, typeof(MuteEffect) },
-		{ RoleType.clumsy, typeof(ClumsyEffects) },
-		{ RoleType.drunk, typeof(DrunkEffects) },
-		{ RoleType.drugs, typeof(DrugsEffects) },
-		{ RoleType.narcoleptic, typeof(NarcolepticEffect) },
-		{ RoleType.oneEyed, typeof(OneEyedEffects) },
-		{ RoleType.medic, typeof(MedicEffects) }
+		{ RoleType.blind, typeof(Blind) },
+		{ RoleType.deaf, typeof(Deaf) },
+		{ RoleType.mute, typeof(Mute) },
+		{ RoleType.clumsy, typeof(Clumsy) },
+		{ RoleType.drunk, typeof(Drunk) },
+		{ RoleType.drugs, typeof(Drugs) },
+		{ RoleType.narcoleptic, typeof(Narcoleptic) },
+		{ RoleType.oneEyed, typeof(OneEyed) },
+		{ RoleType.medic, typeof(Medic) }
 		// RoleType.nothing is intentionally excluded
 	};
 

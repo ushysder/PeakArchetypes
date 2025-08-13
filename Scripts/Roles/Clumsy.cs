@@ -11,7 +11,7 @@ using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles
 {
-	internal class ClumsyEffects : MonoBehaviour
+	internal class Clumsy : MonoBehaviour
 	{
 		Character character;
 		CharacterMovement characterMovement;

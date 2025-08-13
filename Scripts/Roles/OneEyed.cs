@@ -7,7 +7,7 @@ using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles
 {
-	public class OneEyedEffects : MonoBehaviour
+	public class OneEyed : MonoBehaviour
 	{
 		CharacterAfflictions afflictions;
 		Character character;

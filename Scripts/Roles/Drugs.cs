@@ -12,7 +12,7 @@ using KomiChallenge.Shared;
 
 namespace KomiChallenge.Scripts.Roles;
 
-public class DrugsEffects : MonoBehaviour
+public class Drugs : MonoBehaviour
 {
 	readonly List<EffectParam> drugsParams = [];
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace KomiChallenge.Scripts.Roles;
-public class DeafEffect : MonoBehaviour
+public class Deaf : MonoBehaviour
 {
 	void Start()
 	{
