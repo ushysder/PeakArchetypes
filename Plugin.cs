@@ -24,6 +24,10 @@ public class Plugin : BaseUnityPlugin
 		_harmony = new Harmony(modGUID);
 		_harmony.PatchAll(Assembly.GetExecutingAssembly());
 		RoleManager.AppendRoles();
+
+		string url = "https://raw.githubusercontent.com/ushysder/PeakArchetypes/refs/heads/dev/Localization/Localization.json";
+		Localization.LoadFromUrl(url);
+
 		mls.LogInfo($"[{modName}] Plugin initialized.");
 	}
 	

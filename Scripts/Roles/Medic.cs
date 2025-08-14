@@ -1,6 +1,7 @@
 ﻿using PeakArchetypes.Shared;
 using PeakArchetypes.Utils;
 using Photon.Pun;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -37,9 +38,14 @@ namespace PeakArchetypes.Scripts.Roles
 		bool isHealingHold = false;
 		float holdTimer = 0f;
 		Slider progressBarSlider;
-		
+
+		string lang;
+
 		void Initialize()
 		{
+			lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+			if (lang != "en" && lang != "fr") lang = "en";
+
 			character = GameHelpers.GetCharacterComponent();
 			if (character == null)
 			{
@@ -440,7 +446,8 @@ namespace PeakArchetypes.Scripts.Roles
 			chargingText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 			chargingText.fontSize = 18;
 			chargingText.color = Color.white;
-			chargingText.text = "Préparation du soin...";
+			chargingText.text = Localization.Get(lang, "HealingText");
+
 			RectTransform chargingRect = chargingGO.GetComponent<RectTransform>();
 			chargingRect.anchorMin = new Vector2(0.5f, 0f);
 			chargingRect.anchorMax = new Vector2(0.5f, 0f);

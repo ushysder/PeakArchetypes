@@ -1,5 +1,7 @@
-﻿using Photon.Pun;
+﻿using PeakArchetypes.Scripts.Roles;
+using Photon.Pun;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace PeakArchetypes.Scripts;
@@ -26,59 +28,26 @@ public class RoleManager
 
 	public static void AppendRoles()
 	{
-		defaultTypes.Add(new Role(
-		"Basique",
-		"Vous n'avez pas les bases",
-		RoleType.nothing
-		));
+		string lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+		if (lang != "en" && lang != "fr") lang = "en";
 
-		defaultTypes.Add(new Role(
-		"Aveugle",
-		"Comme Daredevil, stylé non ?",
-		RoleType.blind
-		));
+		void AddRole(string key, RoleType type)
+		{
+			string roleName = Localization.Get(lang, key + "_Name");
+			string roleDesc = Localization.Get(lang, key + "_Desc");
+			defaultTypes.Add(new Role(roleName, roleDesc, type));
+		}
 
-		defaultTypes.Add(new Role(
-		"Sourd",
-		"Mais pas muet, n'hésite pas à gueuler.",
-		RoleType.deaf
-		));
-
-		defaultTypes.Add(new Role(
-		"Muet",
-		"Tg batar",
-		RoleType.mute
-		));
-
-		defaultTypes.Add(new Role(
-		"Drogué",
-		"C'est de la bonne",
-		RoleType.drugs));
-
-		defaultTypes.Add(new Role(
-		"Bourré",
-		"Arrête de picoler, c'est pas sameglou !",
-		RoleType.drunk));
-
-		defaultTypes.Add(new Role(
-		"Maladroit",
-		"Fais attention où tu mets les pieds.",
-		RoleType.clumsy));
-
-		defaultTypes.Add(new Role(
-		"Narcoleptique",
-		"Si tu trouves quelqu’un qui ronfle, c’est sûrement toi !",
-		RoleType.narcoleptic));
-
-		defaultTypes.Add(new Role(
-		"Borgne",
-		"Tu vois pas très bien, mais tu vois quand même.",
-		RoleType.oneEyed));
-
-		defaultTypes.Add(new Role(
-		"Médecin",
-		"Tu as des compétences médicales, mais tu n'es pas un super-héros.",
-		RoleType.medic));
+		AddRole("Basic", RoleType.nothing);
+		AddRole(nameof(Blind), RoleType.blind);
+		AddRole(nameof(Deaf), RoleType.deaf);
+		AddRole(nameof(Mute), RoleType.mute);
+		AddRole(nameof(Drugs), RoleType.drugs);
+		AddRole(nameof(Drunk), RoleType.drunk);
+		AddRole(nameof(Clumsy), RoleType.clumsy);
+		AddRole(nameof(Narcoleptic), RoleType.narcoleptic);
+		AddRole(nameof(OneEyed), RoleType.oneEyed);
+		AddRole(nameof(Medic), RoleType.medic);
 	}
 
 	public static void ApplyDebuffs()

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using PeakArchetypes.Scripts;
+using Photon.Pun;
+using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
-using PeakArchetypes.Scripts;
 
 namespace PeakArchetypes.UI;
 
@@ -11,12 +12,20 @@ public class RoleSelectionUI : MonoBehaviour
 	Text displayText;
 	GameObject panel;
 	int selectedIndex = -1;
+	string lang;
 
 	List<Role> RoleList => RoleManager.defaultTypes;
 
 	#region Unity Methods 
 
-	void Start() => CreateUI();
+	void Start()
+	{
+		// Detect system language
+		lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+		if (lang != "en" && lang != "fr") lang = "en";
+
+		CreateUI();
+	}
 
 	void OnDestroy()
 	{
@@ -113,7 +122,7 @@ public class RoleSelectionUI : MonoBehaviour
 
 	void UpdateDisplayText()
 	{
-		string text = "<b>Choisissez votre rôle :</b>\n\n";
+		string text = Localization.Get(lang, "ChooseRole") + "\n\n";
 
 		for (int i = 0; i < RoleList.Count; i++)
 		{
@@ -121,7 +130,7 @@ public class RoleSelectionUI : MonoBehaviour
 			text += $"{prefix}<b>{i}</b>. {RoleList[i].RoleName} - {RoleList[i].Desc}\n";
 		}
 
-		text += $"\nAppuyez sur un chiffre (0-{RoleList.Count-1}) pour choisir, puis Entrée pour confirmer.";
+		text += "\n" + Localization.Get(lang, "EnterNumber");
 		displayText.text = text;
 	}
 
