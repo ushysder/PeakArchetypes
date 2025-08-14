@@ -1,67 +1,108 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Text.Json;
 
 public static class Localization
 {
-	public static Dictionary<string, Dictionary<string, string>> Data = [];
-	static readonly string cacheFile = Path.Combine(Environment.CurrentDirectory, "LocalizationCache.json");
-	static readonly TimeSpan cacheDuration = TimeSpan.FromHours(24); // cache validity
+	static readonly string CachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LocalizationCache.json");
+	static readonly string TimestampPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LocalizationCache.timestamp");
+	static readonly string RemoteUrl = "https://raw.githubusercontent.com/ushysder/PeakArchetypes/refs/heads/dev/Localization/Localization.json";
 
-	public static void LoadFromUrl(string url)
+	public static Dictionary<string, Dictionary<string, string>> Data { get; private set; } = [];
+
+	/// <summary>
+	/// Loads localization data, fetching from GitHub if cache is old or missing.
+	/// </summary>
+	public static void Init()
 	{
-		bool useCache = false;
+		bool shouldFetch = true;
 
-		// Check if cache exists and is fresh
-		if (File.Exists(cacheFile))
-		{
-			DateTime lastWrite = File.GetLastWriteTimeUtc(cacheFile);
-			if ((DateTime.UtcNow - lastWrite) < cacheDuration)
-			{
-				useCache = true;
-			}
-		}
-
-		if (!useCache)
+		// Check timestamp to see if cache is still fresh
+		if (File.Exists(CachePath) && File.Exists(TimestampPath))
 		{
 			try
 			{
-				using WebClient client = new();
-				string json = client.DownloadString(url);
-
-				// Save cache locally
-				File.WriteAllText(cacheFile, json);
-
-				Console.WriteLine("[RemoteLocalization] Fetched JSON from URL.");
-				Data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json);
-				return;
+				var lastUpdate = DateTime.Parse(File.ReadAllText(TimestampPath));
+				if ((DateTime.UtcNow - lastUpdate).TotalHours < 24)
+				{
+					shouldFetch = false; // Cache is still fresh
+				}
 			}
-			catch (Exception e)
+			catch { /* Ignore and force fetch */ }
+		}
+
+		if (shouldFetch)
+		{
+			if (TryFetchFromGitHub(out var json))
 			{
-				Console.WriteLine("[RemoteLocalization] Failed to fetch from URL: " + e.Message);
+				LoadJson(json);
+				File.WriteAllText(CachePath, json);
+				File.WriteAllText(TimestampPath, DateTime.UtcNow.ToString("o"));
+				return;
 			}
 		}
 
-		// Load from cache if fetch failed or cache is still valid
-		if (File.Exists(cacheFile))
+		// If we can't fetch, load from cache
+		if (File.Exists(CachePath))
 		{
-			Console.WriteLine("[RemoteLocalization] Loading from cache.");
-			string cachedJson = File.ReadAllText(cacheFile);
-			Data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(cachedJson);
+			var json = File.ReadAllText(CachePath);
+			LoadJson(json);
 		}
 		else
 		{
-			Console.WriteLine("[RemoteLocalization] No cache available, empty localization.");
+			Data.Clear();
+		}
+	}
+
+	static bool TryFetchFromGitHub(out string json)
+	{
+		try
+		{
+			using var client = new WebClient();
+			client.Headers.Add("User-Agent", "PeakArchetypes");
+			json = client.DownloadString(RemoteUrl);
+			return true;
+		}
+		catch
+		{
+			json = null;
+			return false;
+		}
+	}
+
+	static void LoadJson(string json)
+	{
+		try
+		{
+			Data = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json);
+		}
+		catch
+		{
 			Data = [];
 		}
 	}
 
+	/// <summary>
+	/// Get a localized string for the current system language.
+	/// </summary>
 	public static string Get(string lang, string key)
 	{
 		if (Data.TryGetValue(lang, out var dict) && dict.TryGetValue(key, out var value))
 			return value;
-		return key; // fallback if missing
+
+		return key; // fallback
+	}
+
+	/// <summary>
+	/// Auto-detects the system's two-letter ISO language code (e.g., "en", "fr").
+	/// </summary>
+	public static string GetSystemLang()
+	{
+		var lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+		if (!Data.ContainsKey(lang)) lang = "en"; // fallback to English
+		return lang;
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using PeakArchetypes.Scripts.Roles;
 using Photon.Pun;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 
 namespace PeakArchetypes.Scripts;
@@ -28,8 +27,7 @@ public class RoleManager
 
 	public static void AppendRoles()
 	{
-		string lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-		if (lang != "en" && lang != "fr") lang = "en";
+		string lang = Localization.GetSystemLang();
 
 		void AddRole(string key, RoleType type)
 		{

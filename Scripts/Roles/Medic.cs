@@ -1,7 +1,6 @@
 ﻿using PeakArchetypes.Shared;
 using PeakArchetypes.Utils;
 using Photon.Pun;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -43,8 +42,7 @@ namespace PeakArchetypes.Scripts.Roles
 
 		void Initialize()
 		{
-			lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-			if (lang != "en" && lang != "fr") lang = "en";
+			lang = Localization.GetSystemLang();
 
 			character = GameHelpers.GetCharacterComponent();
 			if (character == null)

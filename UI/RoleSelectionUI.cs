@@ -1,7 +1,6 @@
 ﻿using PeakArchetypes.Scripts;
 using Photon.Pun;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +20,7 @@ public class RoleSelectionUI : MonoBehaviour
 	void Start()
 	{
 		// Detect system language
-		lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-		if (lang != "en" && lang != "fr") lang = "en";
+		lang = Localization.GetSystemLang();
 
 		CreateUI();
 	}
