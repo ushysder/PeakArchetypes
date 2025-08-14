@@ -91,8 +91,6 @@ public class Narcoleptic : MonoBehaviour
 
 	IEnumerator NarcolepticRoutine()
 	{
-		var view = character.refs.view;
-
 		while (true)
 		{
 			// Increase drowsiness gradually until max or player passes out
