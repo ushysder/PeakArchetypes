@@ -172,8 +172,7 @@ namespace PeakArchetypes.Scripts.Roles
 						progressBarSlider.value = HoldDuration;
 
 					var roleRPC = character.GetComponent<RoleRPC>();
-					if (roleRPC != null)
-						roleRPC.photonView.RPC(nameof(RoleRPC.HideHealingCircleRPC), RpcTarget.All);
+					roleRPC?.photonView.RPC(nameof(RoleRPC.HideHealingCircleRPC), RpcTarget.All);
 
 					ShowHealingProgressUI(false);
 				}
@@ -242,8 +241,7 @@ namespace PeakArchetypes.Scripts.Roles
 				if (!PhotonNetwork.IsMasterClient)
 				{
 					var roleRPC = character.GetComponent<RoleRPC>();
-					if (roleRPC != null)
-						roleRPC.photonView.RPC(nameof(RoleRPC.RequestGiveItemRPC), RpcTarget.MasterClient, character.refs.view.ViewID, item.name);
+					roleRPC?.photonView.RPC(nameof(RoleRPC.RequestGiveItemRPC), RpcTarget.MasterClient, character.refs.view.ViewID, item.name);
 				}
 				else
 				{
@@ -324,7 +322,7 @@ namespace PeakArchetypes.Scripts.Roles
 			iconImage.fillAmount = 1f;
 
 			// Cooldown text
-			GameObject cooldownObj = new GameObject("CooldownText");
+			GameObject cooldownObj = new("CooldownText");
 			cooldownObj.transform.SetParent(hudObject.transform, false);
 			cooldownText = cooldownObj.AddComponent<Text>();
 			cooldownText.alignment = TextAnchor.MiddleCenter;
@@ -334,7 +332,7 @@ namespace PeakArchetypes.Scripts.Roles
 			cooldownText.rectTransform.sizeDelta = new Vector2(64, 64);
 
 			// Keybind text
-			GameObject keybindObj = new GameObject("KeybindText");
+			GameObject keybindObj = new("KeybindText");
 			keybindObj.transform.SetParent(hudObject.transform, false);
 			keybindText = keybindObj.AddComponent<Text>();
 			keybindText.alignment = TextAnchor.UpperCenter;
@@ -365,14 +363,14 @@ namespace PeakArchetypes.Scripts.Roles
 		void SetupHealingProgressUI()
 		{
 			// Create Canvas
-			GameObject canvasGO = new GameObject("MedicHealCanvas");
+			GameObject canvasGO = new("MedicHealCanvas");
 			healCanvas = canvasGO.AddComponent<Canvas>();
 			healCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
 			canvasGO.AddComponent<CanvasScaler>();
 			canvasGO.AddComponent<GraphicRaycaster>();
 
 			// Create Slider GameObject
-			GameObject sliderGO = new GameObject("ProgressBarSlider");
+			GameObject sliderGO = new("ProgressBarSlider");
 			sliderGO.transform.SetParent(canvasGO.transform);
 
 			Slider slider = sliderGO.AddComponent<Slider>();
@@ -391,7 +389,7 @@ namespace PeakArchetypes.Scripts.Roles
 			slider.value = 0f;
 
 			// Create background (black border)
-			GameObject backgroundGO = new GameObject("Background");
+			GameObject backgroundGO = new("Background");
 			backgroundGO.transform.SetParent(sliderGO.transform);
 			Image bgImage = backgroundGO.AddComponent<Image>();
 			bgImage.color = Color.black;
@@ -405,7 +403,7 @@ namespace PeakArchetypes.Scripts.Roles
 			slider.targetGraphic = bgImage;
 
 			// Create fill area
-			GameObject fillAreaGO = new GameObject("Fill Area");
+			GameObject fillAreaGO = new("Fill Area");
 			fillAreaGO.transform.SetParent(sliderGO.transform);
 			RectTransform fillAreaRect = fillAreaGO.AddComponent<RectTransform>();
 			fillAreaRect.anchorMin = new Vector2(0, 0);
@@ -414,7 +412,7 @@ namespace PeakArchetypes.Scripts.Roles
 			fillAreaRect.offsetMax = new Vector2(-5, -5);
 
 			// Create fill image
-			GameObject fillGO = new GameObject("Fill");
+			GameObject fillGO = new("Fill");
 			fillGO.transform.SetParent(fillAreaGO.transform);
 			Image fillImage = fillGO.AddComponent<Image>();
 			fillImage.color = Color.green;
@@ -435,7 +433,7 @@ namespace PeakArchetypes.Scripts.Roles
 
 			progressBarSlider.gameObject.SetActive(false);
 
-			GameObject chargingGO = new GameObject("ChargingText");
+			GameObject chargingGO = new("ChargingText");
 			chargingGO.transform.SetParent(canvasGO.transform);
 			chargingText = chargingGO.AddComponent<Text>();
 			chargingText.alignment = TextAnchor.MiddleCenter;
@@ -451,7 +449,7 @@ namespace PeakArchetypes.Scripts.Roles
 			chargingText.gameObject.SetActive(false);
 
 			// Timer Text
-			GameObject timerGO = new GameObject("TimerText");
+			GameObject timerGO = new("TimerText");
 			timerGO.transform.SetParent(canvasGO.transform);
 			timerText = timerGO.AddComponent<Text>();
 			timerText.alignment = TextAnchor.MiddleCenter;
@@ -469,17 +467,13 @@ namespace PeakArchetypes.Scripts.Roles
 
 		void ShowHealingProgressUI(bool show)
 		{
-			if (healCanvas != null)
-				healCanvas.gameObject.SetActive(show);
+			healCanvas?.gameObject.SetActive(show);
 
-			if (chargingText != null)
-				chargingText.gameObject.SetActive(show);
+			chargingText?.gameObject.SetActive(show);
 
-			if (timerText != null)
-				timerText.gameObject.SetActive(show);
+			timerText?.gameObject.SetActive(show);
 
-			if (progressBarSlider != null)
-				progressBarSlider.gameObject.SetActive(show);
+			progressBarSlider?.gameObject.SetActive(show);
 
 			if (show && progressBarSlider != null)
 				progressBarSlider.value = HoldDuration; // start full

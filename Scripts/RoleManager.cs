@@ -86,10 +86,7 @@ public class RoleManager
 		int localID = Character.localCharacter.gameObject.GetComponent<PhotonView>().Owner.ActorNumber;
 		if (players.ContainsKey(localID))
 		{
-			Role plrRole = Character.localCharacter.gameObject.GetComponent<Role>();
-			if (plrRole == null)
-				plrRole = Character.localCharacter.gameObject.AddComponent<Role>();
-
+			Role plrRole = Character.localCharacter.gameObject.GetComponent<Role>() ?? Character.localCharacter.gameObject.AddComponent<Role>();
 			plrRole.RoleName = players[localID].RoleName;
 			plrRole.RoleType = players[localID].RoleType;
 			plrRole.Desc = players[localID].Desc;
