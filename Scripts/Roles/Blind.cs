@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 
 public class Blind : MonoBehaviour
 {

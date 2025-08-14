@@ -1,4 +1,4 @@
-﻿namespace KomiChallenge.Scripts;
+﻿namespace PeakArchetypes.Scripts;
 
 internal static class GameHelpers
 {

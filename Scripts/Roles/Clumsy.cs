@@ -3,13 +3,13 @@ using System.Reflection;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using KomiChallenge.Utils;
+using PeakArchetypes.Utils;
 using Photon.Pun;
 using System.Collections.Generic;
 using Zorro.Core;
-using KomiChallenge.Shared;
+using PeakArchetypes.Shared;
 
-namespace KomiChallenge.Scripts.Roles
+namespace PeakArchetypes.Scripts.Roles
 {
 	internal class Clumsy : MonoBehaviour
 	{

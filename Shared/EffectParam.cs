@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using UnityEngine.Rendering;
 
-namespace KomiChallenge.Shared;
+namespace PeakArchetypes.Shared;
 public class EffectParam
 {
 	public VolumeComponent effect;

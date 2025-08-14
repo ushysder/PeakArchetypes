@@ -2,16 +2,16 @@
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using KomiChallenge.Scripts;
-using KomiChallenge.Utils;
+using PeakArchetypes.Scripts;
+using PeakArchetypes.Utils;
 
-namespace KomiChallenge;
+namespace PeakArchetypes;
 
 [BepInPlugin(modGUID, modName, modVersion)]
 public class Plugin : BaseUnityPlugin
 {
-	public const string modGUID = "KomiChallenge.ushysder";
-	public const string modName = "KomiChallenge";
+	public const string modGUID = "ushysder.PeakArchetypes";
+	public const string modName = "PeakArchetypes";
 	public const string modVersion = "0.5.1";
 	internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 	public static int localID;

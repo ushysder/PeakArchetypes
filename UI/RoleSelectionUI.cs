@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using KomiChallenge.Scripts;
+using PeakArchetypes.Scripts;
 
-namespace KomiChallenge.UI;
+namespace PeakArchetypes.UI;
 
 public class RoleSelectionUI : MonoBehaviour
 {

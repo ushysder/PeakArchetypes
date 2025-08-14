@@ -1,12 +1,12 @@
-﻿using KomiChallenge.Shared;
-using KomiChallenge.Utils;
+﻿using PeakArchetypes.Shared;
+using PeakArchetypes.Utils;
 using Photon.Pun;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace KomiChallenge.Scripts.Roles
+namespace PeakArchetypes.Scripts.Roles
 {
 	public class Medic : MonoBehaviour
 	{

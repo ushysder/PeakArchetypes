@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KomiChallenge.Shared;
+namespace PeakArchetypes.Shared;
 public class RoleRPC : MonoBehaviourPun
 {
 	GameObject currentHealingCircle;

@@ -2,7 +2,7 @@
 using Photon.Voice.Unity;
 using UnityEngine;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 
 public class Mute : MonoBehaviour
 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 public class Deaf : MonoBehaviour
 {
 	void Start()

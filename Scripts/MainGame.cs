@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
-using KomiChallenge.Shared;
+using PeakArchetypes.Shared;
 using Photon.Pun;
 using UnityEngine;
 
-namespace KomiChallenge.Scripts;
+namespace PeakArchetypes.Scripts;
 
 [HarmonyPatch]
 internal class MainGame

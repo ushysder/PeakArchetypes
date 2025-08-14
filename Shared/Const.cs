@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace KomiChallenge.Shared;
+namespace PeakArchetypes.Shared;
 
 class Const
 {

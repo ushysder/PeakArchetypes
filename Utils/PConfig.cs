@@ -1,8 +1,8 @@
 ﻿using BepInEx.Configuration;
-using KomiChallenge.Shared;
+using PeakArchetypes.Shared;
 using UnityEngine;
 
-namespace KomiChallenge.Utils;
+namespace PeakArchetypes.Utils;
 
 public class PConfig
 {

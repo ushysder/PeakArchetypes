@@ -1,10 +1,10 @@
-﻿using KomiChallenge.Shared;
-using KomiChallenge.Utils;
+﻿using PeakArchetypes.Shared;
+using PeakArchetypes.Utils;
 using System.Collections;
 using UnityEngine;
 using static CharacterAfflictions;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 
 public class Narcoleptic : MonoBehaviour
 {

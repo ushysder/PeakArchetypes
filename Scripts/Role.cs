@@ -1,10 +1,10 @@
-﻿using KomiChallenge.Scripts.Roles;
+﻿using PeakArchetypes.Scripts.Roles;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static KomiChallenge.Scripts.RoleManager;
+using static PeakArchetypes.Scripts.RoleManager;
 
-namespace KomiChallenge.Scripts;
+namespace PeakArchetypes.Scripts;
 
 public class Role : MonoBehaviour
 {

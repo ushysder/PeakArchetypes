@@ -2,10 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 using static CharacterAfflictions;
-using KomiChallenge.Utils;
-using KomiChallenge.Shared;
+using PeakArchetypes.Utils;
+using PeakArchetypes.Shared;
 
-namespace KomiChallenge.Scripts.Roles
+namespace PeakArchetypes.Scripts.Roles
 {
 	public class OneEyed : MonoBehaviour
 	{

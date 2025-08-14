@@ -7,10 +7,10 @@ using Photon.Pun;
 using static CharacterAfflictions;
 using System.Collections;
 using Random = UnityEngine.Random;
-using KomiChallenge.Utils;
-using KomiChallenge.Shared;
+using PeakArchetypes.Utils;
+using PeakArchetypes.Shared;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 
 public class Drugs : MonoBehaviour
 {

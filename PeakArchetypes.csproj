@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<AssemblyName>ushysder.KomiChallenge</AssemblyName>
+		<AssemblyName>ushysder.PeakArchetypes</AssemblyName>
 		<Product>KomiChallenge</Product>
 		<Version>0.1.0</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

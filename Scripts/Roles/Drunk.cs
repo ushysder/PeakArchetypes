@@ -5,9 +5,9 @@ using System.Collections;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
 using Photon.Pun;
-using KomiChallenge.Shared;
+using PeakArchetypes.Shared;
 
-namespace KomiChallenge.Scripts.Roles;
+namespace PeakArchetypes.Scripts.Roles;
 
 public class Drunk : MonoBehaviour
 {

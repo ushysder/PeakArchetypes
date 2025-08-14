@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KomiChallenge.Scripts;
+namespace PeakArchetypes.Scripts;
 
 public class RoleManager
 {
