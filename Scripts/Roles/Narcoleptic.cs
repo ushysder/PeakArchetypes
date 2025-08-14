@@ -24,7 +24,7 @@ public class Narcoleptic : MonoBehaviour
 		character = GameHelpers.GetCharacterComponent();
 		if (character == null)
 		{
-			Debug.LogError("[NarcolepticEffect] Character component not found.");
+			Debug.LogError("[Narcoleptic] Character component not found.");
 			enabled = false;
 			return;
 		}
@@ -32,7 +32,7 @@ public class Narcoleptic : MonoBehaviour
 		afflictions = character.refs.afflictions;
 		if (afflictions == null)
 		{
-			Debug.LogError("[NarcolepticEffect] CharacterAfflictions not found.");
+			Debug.LogError("[Narcoleptic] CharacterAfflictions not found.");
 			enabled = false;
 			return;
 		}
@@ -48,13 +48,13 @@ public class Narcoleptic : MonoBehaviour
 
 		drowsyIncreasePerSecond = maxDrowsy / configTimeToFull;
 
-		Debug.Log($"[NarcolepticEffect] drowsyIncreasePerSecond set to {drowsyIncreasePerSecond} (time to full: {configTimeToFull}s)");
+		Debug.Log($"[Narcoleptic] drowsyIncreasePerSecond set to {drowsyIncreasePerSecond} (time to full: {configTimeToFull}s)");
 
 		passOutDuration = (configPassOutDuration >= Const.narco_passOutDuration_Min && configPassOutDuration <= Const.narco_passOutDuration_Max)
 			? configPassOutDuration
 			: Const.narco_passOutDuration;
 
-		Debug.Log($"[NarcolepticEffect] passOutDuration set to {passOutDuration}s");
+		Debug.Log($"[Narcoleptic] passOutDuration set to {passOutDuration}s");
 
 		SaveAndDisableDrowsyDecay();
 	}
@@ -64,14 +64,14 @@ public class Narcoleptic : MonoBehaviour
 		StopCoroutine(NarcolepticRoutine());
 		RestoreDrowsyDecay();
 		
-		Debug.Log($"[NarcolepticEffect] Reset complete on destroy.");
+		Debug.Log($"[Narcoleptic] Reset complete on destroy.");
 	}
 
 	void Start()
 	{
 		Initialize();
 		StartCoroutine(NarcolepticRoutine());
-		Debug.Log("[NarcolepticEffect] Narcoleptic Effects started.");
+		Debug.Log("[Narcoleptic] Narcoleptic Effects started.");
 	}
 
 	#endregion Unity Methods
@@ -106,20 +106,20 @@ public class Narcoleptic : MonoBehaviour
 				yield return null;
 			}
 
-			Debug.Log("[NarcolepticEffect] Player passed out.");
+			Debug.Log("[Narcoleptic] Player passed out.");
 
 			yield return new WaitForSeconds(passOutDuration);
 
 			// Attempt to wake up if conditions met
 			if (CanWakeUp())
 			{
-				Debug.Log("[NarcolepticEffect] Player waking up from narcolepsy.");
+				Debug.Log("[Narcoleptic] Player waking up from narcolepsy.");
 				afflictions.SetStatus(STATUSTYPE.Drowsy, 0f);
 				yield return new WaitForSeconds(1f);
 			}
 			else
 			{
-				Debug.Log("[NarcolepticEffect] Cannot wake up yet, stamina too low.");
+				Debug.Log("[Narcoleptic] Cannot wake up yet, stamina too low.");
 				yield return new WaitForSeconds(1f);
 			}
 		}

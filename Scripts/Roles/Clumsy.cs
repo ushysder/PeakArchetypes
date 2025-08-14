@@ -29,7 +29,7 @@ namespace KomiChallenge.Scripts.Roles
 		{
 			if (Character.localCharacter == null)
 			{
-				Debug.LogWarning("[ClumsyEffects] Character.localCharacter is null — skipping initialization.");
+				Debug.LogWarning("[Clumsy] Character.localCharacter is null — skipping initialization.");
 				enabled = false;
 				return;
 			}
@@ -39,7 +39,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			if (characterMovement == null || character == null)
 			{
-				Debug.LogError("[ClumsyEffects] Missing required components.");
+				Debug.LogError("[Clumsy] Missing required components.");
 				enabled = false;
 				return;
 			}
@@ -50,7 +50,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			if (invertXField == null || invertYField == null)
 			{
-				Debug.LogError("[ClumsyEffects] Invert fields not found.");
+				Debug.LogError("[Clumsy] Invert fields not found.");
 				enabled = false;
 				return;
 			}
@@ -60,7 +60,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			if (invertXObj == null || invertYObj == null)
 			{
-				Debug.LogError("[ClumsyEffects] Invert field values are null.");
+				Debug.LogError("[Clumsy] Invert field values are null.");
 				enabled = false;
 				return;
 			}
@@ -70,7 +70,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			if (valuePropX == null || valuePropY == null)
 			{
-				Debug.LogError("[ClumsyEffects] Value properties not found.");
+				Debug.LogError("[Clumsy] Value properties not found.");
 				enabled = false;
 				return;
 			}
@@ -87,21 +87,21 @@ namespace KomiChallenge.Scripts.Roles
 				? PConfig.clumsy_ItemDropChancePercent.Value
 				: Const.clumsy_ItemDropChancePercent;
 
-			Debug.Log($"[ClumsyEffects] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
+			Debug.Log($"[Clumsy] Configured time range: {validatedMinTime} to {validatedMaxTime} seconds");
 		}
 
 		void OnDestroy()
 		{
 			ApplyInversion(false, false);
 			StopCoroutine(ClumsyRoutine());
-			Debug.Log($"[ClumsyEffects] Reset ClumsyEffects on destroy");
+			Debug.Log($"[Clumsy] Reset Clumsy on destroy");
 		}
 
 		void Start()
 		{
 			Initialize();
 			StartCoroutine(ClumsyRoutine());
-			Debug.Log("[ClumsyEffects] Clumsy effect coroutine started.");
+			Debug.Log("[Clumsy] Clumsy effect coroutine started.");
 		}
 
 		#endregion Unity Methods
@@ -124,7 +124,7 @@ namespace KomiChallenge.Scripts.Roles
 			valuePropX.SetValue(invertXObj, enumValueX);
 			valuePropY.SetValue(invertYObj, enumValueY);
 
-			Debug.Log($"[ClumsyEffects] Applied inversion - X: {enumValueX}, Y: {enumValueY}");
+			Debug.Log($"[Clumsy] Applied inversion - X: {enumValueX}, Y: {enumValueY}");
 		}
 
 		IEnumerator ClumsyRoutine()
@@ -167,57 +167,57 @@ namespace KomiChallenge.Scripts.Roles
 
 			if (character.refs.view.IsMine)
 			{
-				Debug.Log($"[ClumsyEffects] Attempting to drop random item at slot {randomSlot} | CurrentSelectedSlot : {character.refs.items.currentSelectedSlot.Value}.");
+				Debug.Log($"[Clumsy] Attempting to drop random item at slot {randomSlot} | CurrentSelectedSlot : {character.refs.items.currentSelectedSlot.Value}.");
 				if (character.refs.items.currentSelectedSlot.IsSome && character.refs.items.currentSelectedSlot.Value == randomSlot)
 				{
 					character.refs.items.EquipSlot(Optionable<byte>.None);
-					Debug.Log($"[ClumsyEffects] Unselected slot {randomSlot} before dropping item.");
+					Debug.Log($"[Clumsy] Unselected slot {randomSlot} before dropping item.");
 				}
 
 				character.refs.view.RPC("ClumsyDropItemRPC", RpcTarget.All, randomSlot, spawnPos);
-				Debug.Log($"[ClumsyEffects] Dropped item from slot {randomSlot} at pos {spawnPos}");
+				Debug.Log($"[Clumsy] Dropped item from slot {randomSlot} at pos {spawnPos}");
 			}
 		}
 
 		[PunRPC]
 		void ClumsyDropItemRPC(byte slotID, Vector3 spawnPosition)
 		{
-			Debug.Log($"[ClumsyDropItemRPC] Called on client {PhotonNetwork.LocalPlayer.NickName}. IsMasterClient={PhotonNetwork.IsMasterClient}");
+			Debug.Log($"[Clumsy] Called on client {PhotonNetwork.LocalPlayer.NickName}. IsMasterClient={PhotonNetwork.IsMasterClient}");
 
 			var itemSlot = character.player.GetItemSlot(slotID);
 			if (!itemSlot.IsEmpty())
 			{
 				string prefabPath = "0_Items/" + itemSlot.GetPrefabName();
-				Debug.Log($"[ClumsyDropItemRPC] Attempting to instantiate prefab '{prefabPath}' at {spawnPosition}");
+				Debug.Log($"[Clumsy] Attempting to instantiate prefab '{prefabPath}' at {spawnPosition}");
 
 				var instantiatedObj = PhotonNetwork.Instantiate(prefabPath, spawnPosition, Quaternion.identity, 0);
 				if (instantiatedObj == null)
 				{
-					Debug.LogError($"[ClumsyDropItemRPC] Failed to instantiate prefab '{prefabPath}'");
+					Debug.LogError($"[Clumsy] Failed to instantiate prefab '{prefabPath}'");
 					return;
 				}
 
 				PhotonView component = instantiatedObj.GetComponent<PhotonView>();
 				if (component == null)
 				{
-					Debug.LogError($"[ClumsyDropItemRPC] Instantiated object missing PhotonView component");
+					Debug.LogError($"[Clumsy] Instantiated object missing PhotonView component");
 					return;
 				}
 
-				Debug.Log($"[ClumsyDropItemRPC] Successfully instantiated '{component.gameObject.name}'");
+				Debug.Log($"[Clumsy] Successfully instantiated '{component.gameObject.name}'");
 
 				component.RPC("SetItemInstanceDataRPC", RpcTarget.All, itemSlot.data);
 				component.RPC("SetKinematicRPC", RpcTarget.All, false, component.transform.position, component.transform.rotation);
 			}
 			else
 			{
-				Debug.LogWarning($"[ClumsyDropItemRPC] Item slot {slotID} is empty, no item to instantiate");
+				Debug.LogWarning($"[Clumsy] Item slot {slotID} is empty, no item to instantiate");
 			}
 			
 			// Only empty the slot if this client owns the character
 			if (character.refs.view.IsMine)
 			{
-				Debug.Log($"[ClumsyDropItemRPC] Emptying slot {slotID} on client {PhotonNetwork.LocalPlayer.NickName}");
+				Debug.Log($"[Clumsy] Emptying slot {slotID} on client {PhotonNetwork.LocalPlayer.NickName}");
 				character.player.EmptySlot(Optionable<byte>.Some(slotID));
 
 				var afflictions = character.refs.afflictions;
@@ -225,11 +225,11 @@ namespace KomiChallenge.Scripts.Roles
 				if (method != null)
 				{
 					method.Invoke(afflictions, null);
-					Debug.Log("[ClumsyDropItemRPC] Called UpdateWeight successfully");
+					Debug.Log("[Clumsy] Called UpdateWeight successfully");
 				}
 				else
 				{
-					Debug.LogWarning("[ClumsyDropItemRPC] Could not find UpdateWeight method");
+					Debug.LogWarning("[Clumsy] Could not find UpdateWeight method");
 				}
 			}
 		}

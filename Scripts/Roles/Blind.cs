@@ -11,7 +11,7 @@ public class Blind : MonoBehaviour
 	{
 		if (blackScreen != null)
 			Destroy(blackScreen);
-		Debug.Log("[BlindEffect] Blind effect destroyed.");
+		Debug.Log("[Blind] Blind effect destroyed.");
 	}
 
 	void Start()
@@ -26,7 +26,7 @@ public class Blind : MonoBehaviour
 		RectTransform rect = blackScreen.GetComponent<RectTransform>();
 		rect.sizeDelta = new Vector2(7200, 7200);
 
-		Debug.Log("[BlindEffect] Blind effect started.");
+		Debug.Log("[Blind] Blind effect started.");
 	}
 }
 

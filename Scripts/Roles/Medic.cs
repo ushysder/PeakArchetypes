@@ -42,7 +42,7 @@ namespace KomiChallenge.Scripts.Roles
 			character = GameHelpers.GetCharacterComponent();
 			if (character == null)
 			{
-				Debug.LogError("[MedicEffects] Character component not found — disabling.");
+				Debug.LogError("[Medic] Character component not found — disabling.");
 				enabled = false;
 				return;
 			}
@@ -50,7 +50,7 @@ namespace KomiChallenge.Scripts.Roles
 			afflictions = character.refs.afflictions;
 			if (afflictions == null)
 			{
-				Debug.LogError("[MedicEffects] CharacterAfflictions not found — disabling.");
+				Debug.LogError("[Medic] CharacterAfflictions not found — disabling.");
 				enabled = false;
 				return;
 			}
@@ -87,13 +87,13 @@ namespace KomiChallenge.Scripts.Roles
 			GiveStartingItems();
 			healCooldown = 0f;
 
-			Debug.Log("[MedicEffects] Medic initialized with starting items.");
+			Debug.Log("[Medic] Medic initialized with starting items.");
 		}
 
 		void Start()
 		{
 			Initialize();
-			Debug.Log("[MedicEffects] Medic effects started.");
+			Debug.Log("[Medic] Medic effects started.");
 		}
 
 		void Update()
@@ -187,7 +187,7 @@ namespace KomiChallenge.Scripts.Roles
 
 		void GiveStartingItems()
 		{
-			Debug.Log("[MedicEffects] Attempting to give starting medical items...");
+			Debug.Log("[Medic] Attempting to give starting medical items...");
 
 			// Load all items once for efficiency
 			Item[] allItems = Resources.FindObjectsOfTypeAll<Item>();
@@ -195,20 +195,20 @@ namespace KomiChallenge.Scripts.Roles
 			// Find FirstAidKit prefab
 			Item firstAidKit = allItems.FirstOrDefault(item => item.name == "FirstAidKit");
 			if (firstAidKit != null)
-				Debug.Log($"[MedicEffects] Found FirstAidKit with ID: {firstAidKit.itemID}");
+				Debug.Log($"[Medic] Found FirstAidKit with ID: {firstAidKit.itemID}");
 			else
-				Debug.LogError("[MedicEffects] Could not find FirstAidKit prefab!");
+				Debug.LogError("[Medic] Could not find FirstAidKit prefab!");
 			
 			// Find Cure-All prefab
 			Item cureAll = allItems.FirstOrDefault(item => item.name == "Cure-All");
 			if (cureAll != null)
-				Debug.Log($"[MedicEffects] Found Cure-All with ID: {cureAll.itemID}");
+				Debug.Log($"[Medic] Found Cure-All with ID: {cureAll.itemID}");
 			else
-				Debug.LogError("[MedicEffects] Could not find Cure-All prefab!");
+				Debug.LogError("[Medic] Could not find Cure-All prefab!");
 			
 			if (character.player == null)
 			{
-				Debug.LogError($"[MedicEffects] Character {character.characterName} has no player component!");
+				Debug.LogError($"[Medic] Character {character.characterName} has no player component!");
 				return;
 			}
 
@@ -235,9 +235,9 @@ namespace KomiChallenge.Scripts.Roles
 				else
 				{
 					if (character.player.AddItem(item.itemID, null, out ItemSlot slot))
-						Debug.Log($"[MedicEffects] Successfully gave {item.name} to {character.characterName} in slot {slot.itemSlotID}");
+						Debug.Log($"[Medic] Successfully gave {item.name} to {character.characterName} in slot {slot.itemSlotID}");
 					else
-						Debug.LogError($"[MedicEffects] Failed to add {item.name} to {character.characterName}");
+						Debug.LogError($"[Medic] Failed to add {item.name} to {character.characterName}");
 				}
 			}
 			else
@@ -255,25 +255,25 @@ namespace KomiChallenge.Scripts.Roles
 		[PunRPC]
 		void MedicDropItemRPC(string prefabName, ItemInstanceData data, Vector3 spawnPosition)
 		{
-			Debug.Log($"Attempting to instantiate prefab '{prefabName}' at {spawnPosition}");
+			Debug.Log($"[Medic] Attempting to instantiate prefab '{prefabName}' at {spawnPosition}");
 
 			string prefabPath = "0_Items/" + prefabName;
 
 			var instantiatedObj = PhotonNetwork.Instantiate(prefabPath, spawnPosition, Quaternion.identity, 0);
 			if (instantiatedObj == null)
 			{
-				Debug.LogError($"Failed to instantiate prefab '{prefabPath}'");
+				Debug.LogError($"[Medic] Failed to instantiate prefab '{prefabPath}'");
 				return;
 			}
 
 			PhotonView component = instantiatedObj.GetComponent<PhotonView>();
 			if (component == null)
 			{
-				Debug.LogError($"Instantiated object missing PhotonView component");
+				Debug.LogError($"[Medic] Instantiated object missing PhotonView component");
 				return;
 			}
 
-			Debug.Log($"Successfully instantiated '{component.gameObject.name}'");
+			Debug.Log($"[Medic] Successfully instantiated '{component.gameObject.name}'");
 			
 			component.RPC("SetItemInstanceDataRPC", RpcTarget.All, data);
 			component.RPC("SetKinematicRPC", RpcTarget.All, false, component.transform.position, component.transform.rotation);

@@ -33,7 +33,7 @@ public class Drugs : MonoBehaviour
 		character = GameHelpers.GetCharacterComponent();
 		if (character == null)
 		{
-			Debug.LogError("[DrugsEffects] Character component not found — disabling.");
+			Debug.LogError("[Drugs] Character component not found — disabling.");
 			enabled = false;
 			return;
 		}
@@ -41,7 +41,7 @@ public class Drugs : MonoBehaviour
 		afflictions = character.refs.afflictions;
 		if (afflictions == null)
 		{
-			Debug.LogError("[DrugsEffects] CharacterAfflictions not found — disabling.");
+			Debug.LogError("[Drugs] CharacterAfflictions not found — disabling.");
 			enabled = false;
 			return;
 		}
@@ -54,14 +54,14 @@ public class Drugs : MonoBehaviour
 
 		poisonIncreasePerSecond = maxPoison / configTimeToFull;
 
-		Debug.Log($"[DrugsEffects] poisonIncreasePerSecond set to {poisonIncreasePerSecond} (time to full: {configTimeToFull}s)");
+		Debug.Log($"[Drugs] poisonIncreasePerSecond set to {poisonIncreasePerSecond} (time to full: {configTimeToFull}s)");
 
 		SaveAndDisablePoisonDecay();
 
 		var volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
 		if (volumes.Length == 0)
 		{
-			Debug.Log("[DrugsEffects] No Volume components found in the scene.");
+			Debug.Log("[Drugs] No Volume components found in the scene.");
 			return;
 		}
 
@@ -121,7 +121,7 @@ public class Drugs : MonoBehaviour
 						effect = effect
 					});
 
-					Debug.Log($"[DrugsEffects] Set '{field.Name}' on '{effectName}' to '{viewNormalsValue}'.");
+					Debug.Log($"[Drugs] Set '{field.Name}' on '{effectName}' to '{viewNormalsValue}'.");
 				}
 			}
 		}
@@ -142,14 +142,14 @@ public class Drugs : MonoBehaviour
 
 		drugsParams.Clear();
 
-		Debug.Log("[DrugsEffects] Reset complete on destroy.");
+		Debug.Log("[Drugs] Reset complete on destroy.");
 	}
 
 	void Start()
 	{
 		Initialize();
 		StartCoroutine(DrugsRoutine());
-		Debug.Log("[DrugsEffects] Drugs effects started.");
+		Debug.Log("[Drugs] Drugs effects started.");
 	}
 
 	#endregion Unity Methods
@@ -181,7 +181,7 @@ public class Drugs : MonoBehaviour
 
 					view.RPC(nameof(Character.RPCA_Die), PhotonNetwork.LocalPlayer, dropPos);
 
-					Debug.Log("[DrugsEffects] Player overdosed and died.");
+					Debug.Log("[Drugs] Player overdosed and died.");
 				}
 				yield break; // Stop coroutine after death
 			}
@@ -194,7 +194,7 @@ public class Drugs : MonoBehaviour
 	{
 		afflictions.poisonReductionPerSecond = originalPoisonReductionPerSecond;
 		afflictions.poisonReductionCooldown = originalPoisonReductionCooldown;
-		Debug.Log("[DrugsEffects] Poison decay restored to original values.");
+		Debug.Log("[Drugs] Poison decay restored to original values.");
 	}
 
 	void SaveAndDisablePoisonDecay()
@@ -204,7 +204,7 @@ public class Drugs : MonoBehaviour
 
 		afflictions.poisonReductionPerSecond = 0f;
 		afflictions.poisonReductionCooldown = 999999f;
-		Debug.Log("[DrugsEffects] Poison decay disabled for overdose effect.");
+		Debug.Log("[Drugs] Poison decay disabled for overdose effect.");
 	}
 
 	#endregion Role Methods

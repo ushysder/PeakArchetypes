@@ -52,21 +52,21 @@ public class Drunk : MonoBehaviour
 			? configTimeToMax
 			: Const.drunk_timeToMaxDrunkness;
 
-		Debug.Log($"[DrunkController] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
+		Debug.Log($"[Drunk] Validated config: maxFall={maxFallInterval}, minFall={minFallInterval}, passOut={passOutDuration}, timeToMax={timeToMaxDrunkness}");
 
 		FindVignetteEffect();
 
 		character = GameHelpers.GetCharacterComponent();
 		if (character == null)
 		{
-			Debug.LogWarning("[DrunkController] No Character component found.");
+			Debug.LogWarning("[Drunk] No Character component found.");
 			enabled = false;
 			return;
 		}
 
 		isDrunk = true;
 
-		Debug.Log("[DrunkController] Initialized and ready to go.");
+		Debug.Log("[Drunk] Initialized and ready to go.");
 	}
 
 	void OnDestroy()
@@ -94,14 +94,14 @@ public class Drunk : MonoBehaviour
 		if (vignetteVolume != null)
 			vignetteVolume.isGlobal = false;
 
-		Debug.Log($"[DrunkController] Reset complete on destroy.");
+		Debug.Log($"[Drunk] Reset complete on destroy.");
 	}
 
 	void Start()
 	{
 		Initialize();
 		StartCoroutine(DrunkRoutine());
-		Debug.Log("[DrunkController] Drunk Effects started.");
+		Debug.Log("[Drunk] Drunk Effects started.");
 	}
 
 	#endregion
@@ -110,7 +110,7 @@ public class Drunk : MonoBehaviour
 
 	IEnumerator DrunkRoutine()
 	{
-		Debug.Log("[DrunkController] Coroutine started.");
+		Debug.Log("[Drunk] Coroutine started.");
 
 		var view = character.refs.view;
 
@@ -134,13 +134,13 @@ public class Drunk : MonoBehaviour
 
 			if (!passedOut && character != null && view != null && view.IsMine)
 			{
-				Debug.Log($"[DrunkController] Falling... drunkenness level: {drunkProgress:F2}");
+				Debug.Log($"[Drunk] Falling... drunkenness level: {drunkProgress:F2}");
 				view.RPC(nameof(Character.RPCA_FallWithScreenShake), PhotonNetwork.LocalPlayer, 0.5f, 5f);
 			}
 
 			if (!passedOut && drunkProgress >= 1f)
 			{
-				Debug.Log("[DrunkController] Max drunkness reached. Passing out...");
+				Debug.Log("[Drunk] Max drunkness reached. Passing out...");
 				passedOut = true;
 				isDrunk = false;
 
@@ -149,7 +149,7 @@ public class Drunk : MonoBehaviour
 
 				yield return new WaitForSeconds(passOutDuration);
 
-				Debug.Log("[DrunkController] Recovering from pass out.");
+				Debug.Log("[Drunk] Recovering from pass out.");
 
 				if (view != null && view.IsMine)
 					view.RPC("RPCA_UnPassOut", PhotonNetwork.LocalPlayer);
@@ -160,7 +160,7 @@ public class Drunk : MonoBehaviour
 			}
 		}
 
-		Debug.Log("[DrunkController] Coroutine exited.");
+		Debug.Log("[Drunk] Coroutine exited.");
 	}
 
 	void FindVignetteEffect()
@@ -203,13 +203,13 @@ public class Drunk : MonoBehaviour
 						}
 					}
 
-					Debug.Log("[DrunkController] Found and cached vignette effect.");
+					Debug.Log("[Drunk] Found and cached vignette effect.");
 					return;
 				}
 			}
 		}
 
-		Debug.LogWarning("[DrunkController] No vignette effect found.");
+		Debug.LogWarning("[Drunk] No vignette effect found.");
 	}
 
 	void UpdateVignette(float level)

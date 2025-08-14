@@ -22,7 +22,7 @@ namespace KomiChallenge.Scripts.Roles
 			character = GameHelpers.GetCharacterComponent();
 			if (character == null)
 			{
-				Debug.LogError("[OneEyedEffects] Character component not found — disabling.");
+				Debug.LogError("[OneEyed] Character component not found — disabling.");
 				enabled = false;
 				return;
 			}
@@ -30,7 +30,7 @@ namespace KomiChallenge.Scripts.Roles
 			afflictions = character.refs.afflictions;
 			if (afflictions == null)
 			{
-				Debug.LogError("[OneEyedEffects] CharacterAfflictions not found — disabling.");
+				Debug.LogError("[OneEyed] CharacterAfflictions not found — disabling.");
 				enabled = false;
 				return;
 			}
@@ -57,14 +57,14 @@ namespace KomiChallenge.Scripts.Roles
 			if (blackHalfScreen != null)
 				Destroy(blackHalfScreen);
 
-			Debug.Log("[OneEyedEffects] Reset complete on destroy.");
+			Debug.Log("[OneEyed] Reset complete on destroy.");
 		}
 
 		void Start()
 		{
 			Initialize();
 			StartCoroutine(OneEyedRoutine());
-			Debug.Log("[OneEyedEffects] OneEyed Effects started.");
+			Debug.Log("[OneEyed] OneEyed Effects started.");
 		}
 
 		#endregion Unity Methods
@@ -76,7 +76,7 @@ namespace KomiChallenge.Scripts.Roles
 			GameObject parent = GameObject.Find("GAME/GUIManager/Canvas_HUD");
 			if (parent == null)
 			{
-				Debug.LogError("[OneEyedEffects] Canvas_HUD not found — cannot create black screen overlay.");
+				Debug.LogError("[OneEyed] Canvas_HUD not found — cannot create black screen overlay.");
 				return;
 			}
 
@@ -94,7 +94,7 @@ namespace KomiChallenge.Scripts.Roles
 
 			blackHalfScreen.transform.SetAsFirstSibling();
 
-			Debug.Log("[OneEyedEffects] Half-screen black overlay created.");
+			Debug.Log("[OneEyed] Half-screen black overlay created.");
 		}
 
 		IEnumerator OneEyedRoutine()
@@ -106,7 +106,7 @@ namespace KomiChallenge.Scripts.Roles
 				if (currentInjury < targetInjury)
 				{
 					afflictions.AddStatus(STATUSTYPE.Injury, targetInjury - currentInjury);
-					Debug.Log($"[OneEyedEffects] Injury level restored to {targetInjury}");
+					Debug.Log($"[OneEyed] Injury level restored to {targetInjury}");
 				}
 
 				yield return new WaitForSeconds(1f);

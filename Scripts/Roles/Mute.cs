@@ -13,13 +13,13 @@ public class Mute : MonoBehaviour
 		recorder = Character.localCharacter.GetComponent<PhotonVoiceView>()?.RecorderInUse;
 		if (recorder != null)
 			recorder.TransmitEnabled = false;
-		Debug.Log("[MuteEffect] Mute effect started.");
+		Debug.Log("[Mute] Mute effect started.");
 	}
 
 	void OnDestroy()
 	{
 		if (recorder != null)
 			recorder.TransmitEnabled = true;
-		Debug.Log("[MuteEffect] Mute effect destroyed.");
+		Debug.Log("[Mute] Mute effect destroyed.");
 	}
 }
