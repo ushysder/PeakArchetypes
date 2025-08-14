@@ -3,7 +3,7 @@
 ---
 
 ## 🆕 What’s New
-- 🛠 [Medic] Correctly update the weight to Medic when giving him the starting items.
+- 🛠 **[Medic]** Correctly update the weight to Medic when giving him the starting items.
 
 ---
 
