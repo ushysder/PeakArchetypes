@@ -34,7 +34,8 @@ The walking party disaster.
 
 #### 🤕 Clumsy  
 Master of disorientation.
-- Mouse look axes (X and Y) randomly invert without warning.  
+- Mouse look axes (X and Y) randomly invert without warning.
+- Sometimes you'll drop an item from your inventory onto the ground.
 > *Guaranteed to make aiming — or just looking around — 300% harder.*
 
 #### 💊 Junky  
@@ -50,8 +51,9 @@ Sleep waits for no one.
 
 #### 👁️ One-Eyed  
 Half the vision, twice the paranoia.  
-- Sees only one side of the world.  
-> *Now you see it… well, half of it.*  
+- Perceives only one side of the world.
+- Permanently loses part of max HP.
+> *You don’t miss much… except everything on your blind side.*  
 
 #### 🩺 Medic
 The healer in the chaos.  
@@ -69,7 +71,7 @@ You can also choose to play without any role or debuff… but where’s the fun 
 
 You can fine-tune the effects for debuffs and roles via the config file:
 
-```PEAK\BepInEx\config\KomiChallenge.ushysder.cfg```
+```PEAK\BepInEx\config\ushysder.PeakArchetypes.cfg```
 
 This file is generated automatically when you first launch the game with the mod enabled.
 
