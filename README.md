@@ -95,4 +95,4 @@ Upon reaching the shore, players are shown their assigned debuff:
 ### 🐛 Bug Reports / Contact
 
 Found a bug or have a suggestion?  
-DM **Ushysder** on Discord.
+- https://github.com/ushysder/PeakArchetypes/issues
