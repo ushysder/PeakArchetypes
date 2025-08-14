@@ -12,7 +12,7 @@ public class Plugin : BaseUnityPlugin
 {
 	public const string modGUID = "ushysder.PeakArchetypes";
 	public const string modName = "PeakArchetypes";
-	public const string modVersion = "0.5.1";
+	public const string modVersion = "0.5.2";
 	internal static ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 	public static int localID;
 	Harmony _harmony;

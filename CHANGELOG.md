@@ -1,13 +1,16 @@
-﻿# 🧪 Patch Notes – Version 0.5.1
+﻿# 🧪 Patch Notes – Version 0.5.2
 
 ---
 
 ## 🆕 What’s New
-- 🛠 **[Medic]** Correctly update the weight to Medic when giving him the starting items.
+- 🌍 Localization of the mod to both English & French
 
 ---
 
 ## 🛠 Changelogs
+
+### 0.5.1
+- 🛠 **[Medic]** Correctly update the weight to Medic when giving him the starting items.
 
 ### 0.5.0
 
