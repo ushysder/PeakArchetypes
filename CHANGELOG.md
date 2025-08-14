@@ -1,9 +1,16 @@
-﻿# 🧪 Patch Notes – Version 0.5.0
-> *“A little healing goes a long way… if you survive long enough to use it.”*
+﻿# 🧪 Patch Notes – Version 0.5.1
 
 ---
 
 ## 🆕 What’s New
+- 🛠 [Medic] Correctly update the weight to Medic when giving him the starting items.
+
+---
+
+## 🛠 Changelogs
+
+### 0.5.0
+
 ### 🩺 New Role – Medic  
 The crew finally gets some proper medical support!  
 - Heals teammates within a defined radius by pressing a button for a short time.
@@ -30,8 +37,11 @@ The crew finally gets some proper medical support!
 ---
 
 ### 0.4.0
-- 🆕 **New Role – One-Eyed** 👁️  
-  See the world through a single eye — half your screen is gone, all your paranoia remains.
+
+### 👁️ New Role – One-Eyed   
+  Half the vision, twice the paranoia.  
+- Sees only one side of the world.  
+> *Now you see it… well, half of it.*  
 
 ---
 
@@ -47,6 +57,7 @@ The crew finally gets some proper medical support!
 ---
 
 ### 0.3.0
+
 ### 💤 New Role – Narcoleptic  
 The master of unintended naps.  
 - Sleepiness slowly builds up as you perform actions.  

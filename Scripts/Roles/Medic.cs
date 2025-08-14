@@ -1,9 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using KomiChallenge.Shared;
+﻿using KomiChallenge.Shared;
+using KomiChallenge.Utils;
 using Photon.Pun;
 using System.Linq;
-using KomiChallenge.Utils;
+using System.Reflection;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace KomiChallenge.Scripts.Roles
 {
@@ -217,6 +218,18 @@ namespace KomiChallenge.Scripts.Roles
 		
 			if (cureAll != null)
 				TryGiveItemToPlayer(cureAll);
+
+			var afflictions = character.refs.afflictions;
+			var method = afflictions.GetType().GetMethod("UpdateWeight", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+			if (method != null)
+			{
+				method.Invoke(afflictions, null);
+				Debug.Log("[Medic] Called UpdateWeight successfully");
+			}
+			else
+			{
+				Debug.LogWarning("[Medic] Could not find UpdateWeight method");
+			}
 		}
 
 		/// <summary>
@@ -242,7 +255,7 @@ namespace KomiChallenge.Scripts.Roles
 			}
 			else
 			{
-				Debug.LogWarning($"[MedicEffects] No empty slots available for {item.name} — dropping on ground.");
+				Debug.LogWarning($"[Medic] No empty slots available for {item.name} — dropping on ground.");
 
 				// Drop the item at player position
 				Vector3 spawnPos = character.refs.hip.transform.position + Vector3.up * 1.5f;
