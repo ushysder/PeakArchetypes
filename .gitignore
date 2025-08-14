@@ -72,3 +72,7 @@ crashlytics-build.properties
 
 # Dlls
 /bin/
+
+# Publish
+/publish
+publish.ps1
