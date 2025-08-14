@@ -8,7 +8,7 @@ using System.Net;
 public static class Localization
 {
 	static readonly string CachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BepInEx", "cache", "PeakArchetypes_LocalizationCache.json");
-	static readonly string RemoteUrl = "https://raw.githubusercontent.com/ushysder/PeakArchetypes/refs/heads/dev/Localization/Localization.json";
+	static readonly string RemoteUrl = "https://raw.githubusercontent.com/ushysder/PeakArchetypes/refs/heads/main/Localization/Localization.json";
 
 	public static Dictionary<string, Dictionary<string, string>> Data { get; private set; } = [];
 
