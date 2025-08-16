@@ -1,4 +1,4 @@
-﻿# Peak Archetypes
+# Peak Archetypes
 
 A chaotic challenge mod for **PEAK**, originally based on the source of [`zeeblo/KomiChallenge`](https://github.com/zeeblo/KomiChallenge).
 
@@ -6,61 +6,79 @@ I’ve completely refactored and customized the code, adding my own mechanics an
 
 ### 💀 Available Roles & Debuffs
 
-At the start of each run, every player chooses **one** of the following challenges (or none, if you’re boring):  
+At the start of each run, every player chooses **one** of the following challenges (or none, if you’re boring):
 
 ---
 
-#### 🙉 Deaf  
-Silence is golden… and deadly.  
-- Cannot hear anything — footsteps, monsters, teammates yelling "RUN!".  
-> *Perfect for people who like jump scares at full strength.*  
+#### 🙉 Deaf
 
-#### 🙈 Blind  
-Who needs vision anyway?  
-- Screen is almost completely dark, forcing you to rely on luck and friends you hopefully trust.  
-> *Navigation sold separately.*  
+Silence is golden… and deadly.
 
-#### 🤐 Mute  
-Speechless survival.  
-- Cannot use voice chat.  
-> *Sometimes silence says it all.*  
+- Cannot hear anything — footsteps, monsters, teammates yelling "RUN!".
+  > _Perfect for people who like jump scares at full strength._
 
-#### 🍻 Drunk  
-The walking party disaster.  
-- Staggers around at intervals.  
-- Vision narrows as intoxication builds.  
-- Passes out briefly at peak drunkenness.  
-> *For those who think alcohol is just water.*  
+#### 🙈 Blind
 
-#### 🤕 Clumsy  
+Who needs vision anyway?
+
+- Screen is almost completely dark, forcing you to rely on luck and friends you hopefully trust.
+  > _Navigation sold separately._
+
+#### 🤐 Mute
+
+Speechless survival.
+
+- Cannot use voice chat.
+  > _Sometimes silence says it all._
+
+#### 🍻 Drunk
+
+The walking party disaster.
+
+- Staggers around at intervals.
+- Vision narrows as intoxication builds.
+- Passes out briefly at peak drunkenness.
+  > _For those who think alcohol is just water._
+
+#### 🤕 Clumsy
+
 Master of disorientation.
+
 - Mouse look axes (X and Y) randomly invert without warning.
 - Sometimes you'll drop an item from your inventory onto the ground.
-> *Guaranteed to make aiming — or just looking around — 300% harder.*
+  > _Guaranteed to make aiming — or just looking around — 300% harder._
 
-#### 💊 Junky  
-Life through a chemical lens.  
-- Sees the world in shifting, distorted colors.  
-- Over time, overdoses can be fatal.  
-> *The world is your kaleidoscope.*  
+#### 💊 Junky
 
-#### 💤 Narcoleptic  
-Sleep waits for no one.  
-- Gradually gain drowsiness until collapsing into deep sleep.  
-> *Perfect for people who like to live dangerously… and horizontally.*  
+Life through a chemical lens.
 
-#### 👁️ One-Eyed  
-Half the vision, twice the paranoia.  
+- Sees the world in shifting, distorted colors.
+- Over time, overdoses can be fatal.
+  > _The world is your kaleidoscope._
+
+#### 💤 Narcoleptic
+
+Sleep waits for no one.
+
+- Gradually gain drowsiness until collapsing into deep sleep.
+  > _Perfect for people who like to live dangerously… and horizontally._
+
+#### 👁️ One-Eyed
+
+Half the vision, twice the paranoia.
+
 - Perceives only one side of the world.
 - Permanently loses part of max HP.
-> *You don’t miss much… except everything on your blind side.*  
+  > _You don’t miss much… except everything on your blind side._
 
 #### 🩺 Medic
-The healer in the chaos.  
-- Can heal nearby allies by holding a button to channel the skill.  
-- Limited by cooldown, radius, and healing amount.  
-- Starts with healing supplies.  
-> *Because someone has to keep this mess alive.*  
+
+The healer in the chaos.
+
+- Can heal nearby allies by holding a button to channel the skill.
+- Limited by cooldown, radius, and healing amount.
+- Starts with healing supplies.
+  > _Because someone has to keep this mess alive._
 
 ---
 
@@ -71,7 +89,7 @@ You can also choose to play without any role or debuff… but where’s the fun 
 
 You can fine-tune the effects for debuffs and roles via the config file:
 
-```PEAK\BepInEx\config\ushysder.PeakArchetypes.cfg```
+`PEAK\BepInEx\config\ushysder.PeakArchetypes.cfg`
 
 This file is generated automatically when you first launch the game with the mod enabled.
 
@@ -96,5 +114,6 @@ Upon reaching the shore, players are shown their assigned debuff:
 
 ### 🐛 Bug Reports / Contact
 
-Found a bug or have a suggestion?  
+Found a bug or have a suggestion?
+
 - https://github.com/ushysder/PeakArchetypes/issues
